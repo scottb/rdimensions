@@ -22,154 +22,58 @@ end
 
 #p @dataset.loop_designs.find {|l| l.name == 'GRQ9' }.mddclass.field.variables.first.ref.node
 %{<variable id="711be68b-f561-435f-a442-dde3e677a4f7" name="Q9" type="3" min="1" mintype="3" max="1" maxtype="3">
-  <labels context="LABEL">
-    <versions>
-      <DIFF OP="ADD" name="1" Index="0">
-        <text context="QUESTION" xml:lang="en-US"/>
-      </DIFF>
-    </versions>
-    <text context="QUESTION" xml:lang="en-US"/>
-  </labels>
+  <labels context="LABEL"><text context="QUESTION" xml:lang="en-US"/></labels>
   <categories global-name-space="-1">
-    <versions>
-      <DIFF OP="ADD" name="1" Index="0" item="a3a920a4-95b9-465e-8554-9af69dd5bc2a"/>
-      <DIFF OP="ADD" name="1" Index="1" item="1ebdc5ae-8e61-46e6-9880-1aac5425c730"/>
-      <DIFF OP="ADD" name="1" Index="2" item="24c5d80f-ff0c-4bd2-9052-b2068d2d097c"/>
-      <DIFF OP="ADD" name="1" Index="3" item="f30e5930-bd7c-4299-88d7-56e1fbae08b7"/>
-      <DIFF OP="ADD" name="1" Index="4" item="2bda1b6f-545d-4588-8214-9ba13a5caad9"/>
-      <DIFF OP="ADD" name="1" Index="5" item="2406e16f-b117-4fe1-bdd8-4334de535be2"/>
-      <DIFF OP="ADD" name="1" Index="6" item="b95780ac-46bc-421e-b39b-931649fae94d"/>
-      <version name="1">
-        <categories global-name-space="-1"/>
-      </version>
-    </versions>
-    <deleted/>
     <category id="_a3a920a4-95b9-465e-8554-9af69dd5bc2a" name="_01">
-      <labels context="LABEL">
-        <versions>
-          <DIFF OP="ADD" name="1" Index="0">
-            <text context="QUESTION" xml:lang="en-US">Once a day</text>
-          </DIFF>
-        </versions>
-        <text context="QUESTION" xml:lang="en-US">Once a day</text>
-      </labels>
-      <versions>
-        <version name="1">
-          <category name="_01"/>
-        </version>
-      </versions>
-      <properties/>
+      <labels context="LABEL"><text context="QUESTION" xml:lang="en-US">Once a day</text></labels>
     </category>
     <category id="_1ebdc5ae-8e61-46e6-9880-1aac5425c730" name="_02">
-      <labels context="LABEL">
-        <versions>
-          <DIFF OP="ADD" name="1" Index="0">
-            <text context="QUESTION" xml:lang="en-US">A few times a week</text>
-          </DIFF>
-        </versions>
-        <text context="QUESTION" xml:lang="en-US">A few times a week</text>
-      </labels>
-      <versions>
-        <version name="1">
-          <category name="_02"/>
-        </version>
-      </versions>
-      <properties/>
+      <labels context="LABEL"><text context="QUESTION" xml:lang="en-US">A few times a week</text></labels>
     </category>
     <category id="_24c5d80f-ff0c-4bd2-9052-b2068d2d097c" name="_03">
-      <labels context="LABEL">
-        <versions>
-          <DIFF OP="ADD" name="1" Index="0">
-            <text context="QUESTION" xml:lang="en-US">Once a week</text>
-          </DIFF>
-        </versions>
-        <text context="QUESTION" xml:lang="en-US">Once a week</text>
-      </labels>
-      <versions>
-        <version name="1">
-          <category name="_03"/>
-        </version>
-      </versions>
-      <properties/>
+      <labels context="LABEL"><text context="QUESTION" xml:lang="en-US">Once a week</text></labels>
     </category>
     <category id="_f30e5930-bd7c-4299-88d7-56e1fbae08b7" name="_04">
-      <labels context="LABEL">
-        <versions>
-          <DIFF OP="ADD" name="1" Index="0">
-            <text context="QUESTION" xml:lang="en-US">A few times a month</text>
-          </DIFF>
-        </versions>
-        <text context="QUESTION" xml:lang="en-US">A few times a month</text>
-      </labels>
-      <versions>
-        <version name="1">
-          <category name="_04"/>
-        </version>
-      </versions>
-      <properties/>
+      <labels context="LABEL"><text context="QUESTION" xml:lang="en-US">A few times a month</text></labels>
     </category>
     <category id="_2bda1b6f-545d-4588-8214-9ba13a5caad9" name="_05">
-      <labels context="LABEL">
-        <versions>
-          <DIFF OP="ADD" name="1" Index="0">
-            <text context="QUESTION" xml:lang="en-US">Once a month or less</text>
-          </DIFF>
-        </versions>
-        <text context="QUESTION" xml:lang="en-US">Once a month or less</text>
-      </labels>
-      <versions>
-        <version name="1">
-          <category name="_05"/>
-        </version>
-      </versions>
-      <properties/>
+      <labels context="LABEL"><text context="QUESTION" xml:lang="en-US">Once a month or less</text></labels>
     </category>
     <category id="_2406e16f-b117-4fe1-bdd8-4334de535be2" name="_06">
-      <labels context="LABEL">
-        <versions>
-          <DIFF OP="ADD" name="1" Index="0">
-            <text context="QUESTION" xml:lang="en-US">Never</text>
-          </DIFF>
-        </versions>
-        <text context="QUESTION" xml:lang="en-US">Never</text>
-      </labels>
-      <versions>
-        <version name="1">
-          <category name="_06"/>
-        </version>
-      </versions>
-      <properties/>
+      <labels context="LABEL"><text context="QUESTION" xml:lang="en-US">Never</text></labels>
     </category>
     <category id="_b95780ac-46bc-421e-b39b-931649fae94d" name="_07">
-      <labels context="LABEL">
-        <versions>
-          <DIFF OP="ADD" name="1" Index="0">
-            <text context="QUESTION" xml:lang="en-US">Don&#x2019;t know</text>
-          </DIFF>
-        </versions>
-        <text context="QUESTION" xml:lang="en-US">Don&#x2019;t know</text>
-      </labels>
-      <versions>
-        <version name="1">
-          <category name="_07"/>
-        </version>
-      </versions>
-      <properties/>
+      <labels context="LABEL"><text context="QUESTION" xml:lang="en-US">Don&#x2019;t know</text></labels>
     </category>
-    <properties/>
   </categories>
-  <versions>
-    <version name="1">
-      <variable name="Q9" type="3" min="1" mintype="3" max="1" maxtype="3"/>
-    </version>
-  </versions>
   <helperfields/>
-  <properties/>
 </variable>}
 p @dataset.loop_designs.find {|l| l.name == 'LoopQ30ToQ31' }.mddclass.field.variables.first.ref.node
-%q{
-
-}
+%q{<variable id="31692551-9fd9-4cfa-b2c8-8affece3f817" name="Q30POS" type="2" min="1" mintype="3">
+  <labels context="LABEL"><text context="QUESTION" xml:lang="en-US">&lt;table width='898px' bgcolor='#c6D0E9' cellspacing='0' cellpadding='5'&gt;&lt;tr&gt;&lt;td&gt;Looking at this statement again, &lt;u&gt;{#\.fhi}please highlight the words or phrases{#\.fes}&lt;/u&gt; that make you feel &lt;u&gt;{#\.fhi}more positive towards Sara Lee{#\.fes}&lt;/u&gt;.&lt;p/&gt;To highlight a word or section of the text, simply click on the first word that you wish to highlight with your mouse, and drag your mouse to the end of the word or section of the text that you want to highlight &#x2013; then release the mouse button.  If you make a mistake, and want to un-highlight a word or section of the text, simply click on that highlighted section of the text to remove the highlight.&lt;p/&gt;When all of the words or sections of text that you wish to highlight have been selected, click the &#x201C;Next&#x201D; button below to continue.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;p/&gt;&lt;table width='898px' bgcolor='#c6D0E9' cellspacing='0' cellpadding='5'&gt;&lt;tr&gt;&lt;td&gt;&lt;div id='stm1' class='mercuryanalytics_text_selector' &gt;{@}&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</text></labels>
+  <helperfields id="7f98f6a9-ea48-49ff-98ad-fd276c42ec43" name="@helperfields" global-name-space="-1">
+    <class id="_5542e352-16dc-4c56-b595-5f6681dcef43" name="StandardTexts" global-name-space="0">
+      <labels context="LABEL"><text context="QUESTION" xml:lang="en-US">StandardTexts</text></labels>
+      <types name="@types" global-name-space="-1"/>
+      <fields name="@fields" global-name-space="-1">
+        <class id="_a32f5615-b125-407f-8692-15d6f1231dd5" name="Errors" global-name-space="0">
+          <labels context="LABEL"><text context="QUESTION" xml:lang="en-US">Errors</text></labels>
+          <types name="@types" global-name-space="-1">
+          </types>
+          <fields name="@fields" global-name-space="-1">
+            <variable id="_53b9d805-2453-4af8-96c3-1050048df44e" name="MissingAnswer" ref="53b9d805-2453-4af8-96c3-1050048df44e"/>
+            <variable id="_62752dda-b996-419d-b04c-0f733e646e61" name="NotSingleAnswer" ref="62752dda-b996-419d-b04c-0f733e646e61"/>
+          </fields>
+          <pages name="@pages" global-name-space="-1">
+          </pages>
+        </class>
+      </fields>
+      <pages name="@pages" global-name-space="-1"/>
+    </class>
+    <variable id="_da8b9bc8-d6f7-4114-9d5d-82d81defa52e" name="Codes" ref="da8b9bc8-d6f7-4114-9d5d-82d81defa52e"/>
+  </helperfields>
+  <categories/>
+</variable>}
 
 #raise "Still need to figure out LoopQ30ToQ31[{A}].Q30POS vs LoopQ30ToQ31[{A}].Q30POS.Codes"
 
