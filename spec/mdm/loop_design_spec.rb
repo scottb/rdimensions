@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-module Dimensions
-  FIXTURE_FILENAME = File.expand_path( File.dirname(__FILE__) + '/../fixtures/P4550054.mdd')
-
+module MDM
   describe LoopDesign do
     context 'in a valid mdd' do
       before do

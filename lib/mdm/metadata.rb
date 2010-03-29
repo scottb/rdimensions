@@ -1,12 +1,12 @@
 require 'nokogiri'
-require 'dimensions/xpath_helper'
-require 'dimensions/variable_definition'
-require 'dimensions/variable_design'
-require 'dimensions/loop_design'
-require 'dimensions/page_definition'
-require 'dimensions/mdd_class'
+require 'mdm/xpath_helper'
+require 'mdm/variable_definition'
+require 'mdm/variable_design'
+require 'mdm/loop_design'
+require 'mdm/page_definition'
+require 'mdm/mdd_class'
 
-module Dimensions
+module MDM
   class Metadata
     include XpathHelper
     attr_reader :ids
@@ -37,7 +37,7 @@ module Dimensions
     end
 
     def simple_variable_names
-      variable_designs.select {|v| v.definition.type != :static && v.definition.casedata? }.map {|v| v.name }
+      variable_designs.select {|v| v.definition.type != :none && v.definition.casedata? }.map {|v| v.name }
     end
 
     def loop_variable_names

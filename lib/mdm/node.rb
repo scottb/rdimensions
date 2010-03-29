@@ -1,6 +1,6 @@
-require 'dimensions/xpath_helper'
+require 'mdm/xpath_helper'
 
-module Dimensions
+module MDM
   class Node
     include XpathHelper
     def initialize( node, ids)

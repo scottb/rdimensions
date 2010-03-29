@@ -1,7 +1,7 @@
-require 'dimensions/node'
-require 'dimensions/contextualized'
+require 'mdm/node'
+require 'mdm/contextualized'
 
-module Dimensions
+module MDM
   class Text < Node # has only @context, @lang, and contents
     include Contextualized
 

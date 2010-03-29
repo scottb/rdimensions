@@ -1,8 +1,8 @@
-require 'dimensions/node'
-require 'dimensions/contextualized'
-require 'dimensions/text'
+require 'mdm/node'
+require 'mdm/contextualized'
+require 'mdm/text'
 
-module Dimensions
+module MDM
   class Label < Node
     include Contextualized
 

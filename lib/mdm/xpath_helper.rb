@@ -1,6 +1,6 @@
-require 'dimensions/node'
+require 'mdm/node'
 
-module Dimensions
+module MDM
   module XpathHelper
     attr_accessor :node
 

@@ -1,6 +1,6 @@
-require 'dimensions/node'
+require 'mdm/node'
 
-module Dimensions
+module MDM
   class HelperFields < Node
     has_child :mddclass, :node_name => 'class', :class => :MDDClass
     has_children :variables, :node_name => 'variable', :class => :Variable

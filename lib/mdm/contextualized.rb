@@ -1,4 +1,4 @@
-module Dimensions
+module MDM
   module Contextualized
     def context
       node[ 'context']

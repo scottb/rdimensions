@@ -1,8 +1,8 @@
-require 'dimensions/node'
-require 'dimensions/labeled'
-require 'dimensions/variable_definition'
+require 'mdm/node'
+require 'mdm/labeled'
+require 'mdm/variable_definition'
 
-module Dimensions
+module MDM
   class LoopDesign < Node
     include Labeled
     has_children :categories, :class => :Categories

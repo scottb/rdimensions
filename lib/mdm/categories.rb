@@ -1,7 +1,7 @@
-require 'dimensions/node'
-require 'dimensions/labeled'
+require 'mdm/node'
+require 'mdm/labeled'
 
-module Dimensions
+module MDM
   class Categories < Node
     include Labeled
     has_children :category_set, :node_name => 'category', :class => :CategoryDefinition

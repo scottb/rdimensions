@@ -1,6 +1,6 @@
-require 'dimensions/label'
+require 'mdm/label'
 
-module Dimensions
+module MDM
   module Labeled
     def labels_present?
       labels
