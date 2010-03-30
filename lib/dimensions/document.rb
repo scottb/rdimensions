@@ -3,7 +3,7 @@ module Dimensions
     include MDMObject
     include LabeledObject
     attr_accessor :xml
-    attr_reader :node
+    attr_reader :node, :uuids
 
     def self.read( filename, &block)
       f = open( filename)
@@ -19,7 +19,7 @@ module Dimensions
     def initialize( xml)
       @xml = Nokogiri::XML( xml)
       @node = @xml.root.children.first
-      @uuids = @node.xpath( '*[@id]').map {|node| [ node[ 'id'], node ]}
+      @uuids = Hash[ @node.xpath( './/*[@id]').map {|node| [ node[ 'id'], node ]}]
       yield self if block_given?
     end
 
@@ -61,6 +61,21 @@ module Dimensions
 
     def routing_contexts
       @label_types ||= Contexts.build_contexts_for( 'routingcontexts', self)
+    end
+
+    def fields
+      @fields ||= @node.at( 'design/fields').children.map do |node|
+	case node.name
+	when 'variable'
+	  Variable.new( self, node)
+	when 'loop'
+	  MDMArray.new( self, node)
+	when 'class'
+	  nil
+	else
+	  nil
+	end
+      end.compact
     end
 
     def log_action

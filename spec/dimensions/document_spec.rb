@@ -48,7 +48,7 @@ module Dimensions
       end
 
       it "has the category map" do
-	@doc.category_map.should have_key( '_01')
+	@doc.category_map.keys.should include( '_01', '_02', 'lst_qstate._44')
 	@doc.category_map[ '_01'].should == 79
 	@doc.category_map.should have( 228).elements
       end
@@ -118,13 +118,12 @@ module Dimensions
       end
 
       it "can enumerate the fields" do
-	pending
-	@doc.should have( 2).fields
+	@doc.should have( 57 + 20).fields
+	@doc.fields.map( &:name).should include( 'Q1', 'GRQ9', 'LoopQ27ToQ29', 'LoopQ30ToQ31')
       end
 
       #it "#hacks" do ; @doc.node.xpath( '*').map( &:name).grep( /data/).should == ['hack'] ; end
       it "#hacks TBD" do
-	pending { @doc.fields }
 	pending { @doc.pages }
       end
 
