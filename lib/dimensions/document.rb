@@ -37,13 +37,17 @@ module Dimensions
     def category_map
       @category_map ||= Hash[ @node.xpath( 'categorymap/categoryid').map {|node| [ node[ 'name'], node[ 'value'].to_i ] }]
     end
-    
+
+    def contexts
+      @contexts ||= @node.xpath( 'contexts/context').map {|node| Context.new( self, node) }.extend( Contexts).with_base( @node.at( 'contexts/@base').value)
+    end
+
     def label_types
       @label_types ||= @node.xpath( 'labeltypes/context').map {|node| Context.new( self, node) }.extend( Contexts).with_base( @node.at( 'labeltypes/@base').value)
     end
 
-    def contexts
-      @contexts ||= @node.xpath( 'contexts/context').map {|node| Context.new( self, node) }.extend( Contexts).with_base( @node.at( 'contexts/@base').value)
+    def routing_contexts
+      @label_types ||= @node.xpath( 'routingcontexts/context').map {|node| Context.new( self, node) }.extend( Contexts).with_base( @node.at( 'routingcontexts/@base').value)
     end
 
     def inspect

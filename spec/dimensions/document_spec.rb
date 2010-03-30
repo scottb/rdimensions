@@ -83,6 +83,12 @@ module Dimensions
 	@doc.contexts.base.should == 'Question'
       end
 
+      it "knows the routing contexts" do
+	@doc.routing_contexts.should have( 1).entry
+	@doc.routing_contexts.first.name.should == 'WEB'
+	@doc.routing_contexts.base.should == 'Web'
+      end
+
       #it "#hacks" do ; @doc.node.xpath( '*').map( &:name).grep( /context/).should == ['hack'] ; end
 
       it "reminds me to remove the node accessors when I'm done" do
@@ -115,7 +121,6 @@ read-only
   mdm_version			- the product version of mdm
   pages				- a collection of Page objects
   routing				- a collection of RoutingItem objects; defines the order in which the questions defined in the IDocument.Fields collection are to be asked
-  routing_contexts	- a list of routing contexts used in the document; represent different interviewing environments (paper, web, cati, etc)
   routing_items		- a flat list of RoutingItem objects associated with the document; a view of IDocument.Routing expanded according to the IRoutingItems.Filter property
   save_logs			- a collection of SaveLog objects
   script_types		- a list of script types used for routing scripts; defaults to 'mrScriptBasic'
