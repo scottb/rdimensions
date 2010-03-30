@@ -27,17 +27,19 @@ module Dimensions
 	:array
       when 'class'
 	:class
+      when 'metadata'
+	:document
       else
-	raise NotYetImplemented
+	raise "not yet implemented: #{@node.name}"
       end
     end
 
     def parent
-      raise NotYetImplemented
+      raise "not yet implemented"
     end
 
     def properties
-      raise NotYetImplemented
+      raise "not yet implemented"
     end
   end
 end

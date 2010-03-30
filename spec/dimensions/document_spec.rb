@@ -31,6 +31,10 @@ module Dimensions
 	@doc = Document.read( P4550054)
       end
 
+      it "knows it's a document" do
+	@doc.object_type_value == :document
+      end
+
       it "is its own document" do
 	@doc.document.should equal( @doc)
       end
