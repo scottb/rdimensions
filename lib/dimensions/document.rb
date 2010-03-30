@@ -1,6 +1,7 @@
 module Dimensions
   class Document
     include MDMObject
+    include LabeledObject
     attr_accessor :xml
     attr_reader :node
 
@@ -39,15 +40,15 @@ module Dimensions
     end
 
     def contexts
-      @contexts ||= @node.xpath( 'contexts/context').map {|node| Context.new( self, node) }.extend( Contexts).with_base( @node.at( 'contexts/@base').value)
+      @contexts ||= Contexts.build_contexts_for( 'contexts', self)
     end
 
     def label_types
-      @label_types ||= @node.xpath( 'labeltypes/context').map {|node| Context.new( self, node) }.extend( Contexts).with_base( @node.at( 'labeltypes/@base').value)
+      @label_types ||= Contexts.build_contexts_for( 'labeltypes', self)
     end
 
     def routing_contexts
-      @label_types ||= @node.xpath( 'routingcontexts/context').map {|node| Context.new( self, node) }.extend( Contexts).with_base( @node.at( 'routingcontexts/@base').value)
+      @label_types ||= Contexts.build_contexts_for( 'routingcontexts', self)
     end
 
     def inspect

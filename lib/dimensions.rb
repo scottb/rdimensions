@@ -1,5 +1,7 @@
 require 'dimensions/mdm_object'
 require 'dimensions/mdm_node'
 require 'dimensions/contexts'
+require 'dimensions/labeled_object'
+require 'dimensions/labels'
 require 'dimensions/context'
 require 'dimensions/document'
