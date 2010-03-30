@@ -27,5 +27,9 @@ module Dimensions
 	@node[ 'type'].to_i
       end
     end
+
+    def categories
+      @categories ||= @node.xpath( 'categories/category').map {|node| MDMElement.new( @document, node) }
+    end
   end
 end

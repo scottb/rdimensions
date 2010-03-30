@@ -35,6 +35,12 @@ module Dimensions
 	it "knows its labels" do
 	  @q2.labels[ :label][ :question][ 'en-US'].should == 'In which of the following categories is your age?'
 	end
+
+	it "knows its categories" do
+	  @q2.should have( 7).categories
+	  cats = @q2.categories
+	  cats.map( &:label).should == ['Under 18', '18-24', '25-34', '35-44', '45-54', '55-64', '65 or older']
+	end
       end
 
       context "without case data" do
@@ -56,6 +62,16 @@ module Dimensions
 
 	it "should recognize text types" do
 	  Variable.new( @doc, @doc.node.at( 'definition/variable[58]')).data_type.should == :text
+	end
+      end
+
+      context "nested categories" do
+	before do
+	  @q1 = Variable.new( @doc, @doc.node.at( 'definition/variable[70]'))
+	end
+
+	it "should know its categories" do
+	  pending { @q1.should have( 50).categories }
 	end
       end
     end
