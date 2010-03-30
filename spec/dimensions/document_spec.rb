@@ -101,13 +101,28 @@ module Dimensions
 	@doc.should have( :no).labels
       end
 
-      #it "#hacks" do ; @doc.node.xpath( '*').map( &:name).grep( /types/).should == ['hack'] ; end
+      it "knows what languages are available" do
+	@doc.should have( 1).languages
+	@doc.languages.first.name.should == 'EN-US'
+	pending { @doc.languages.id.should == '0409' }
+      end
+
+      it "knows what datasources are available" do
+	@doc.should have( 1).data_sources
+	@doc.data_sources.default.should == 'mrRdbDsc2'
+	ds = @doc.data_sources.first
+	ds.name.should == 'mrRdbDsc2'
+	ds.dblocation.should =~ /^Provider=SQLOLEDB\.1;/
+	ds.cdscname.should == 'mrRdbDsc2'
+	ds.project.should == 'P4550054'
+	pending "verification against the documentation"
+      end
+
+      #it "#hacks" do ; @doc.node.xpath( '*').map( &:name).grep( /data/).should == ['hack'] ; end
       it "#hacks TBD" do
 	pending { @doc.fields }
-	pending { @doc.languages }
 	pending { @doc.pages }
 	pending { @doc.data_source_properties }
-	pending { @doc.data_sources }
       end
 
       it "raises NotYetImplementedException on deferred API entries" do
@@ -134,6 +149,12 @@ read-only
   routing			- a collection of RoutingItem objects; defines the order in which the questions defined in the IDocument.Fields collection are to be asked
   data_source_properties	- a collection of custom properties that relate to the current data_source (source-specific information)
   data_sources			- a collection of DataSource objects which hold details of case data
+  variable_instance		- given a partial full name and one or more indexes that represent the iterations, this property returns the corresponding VariableInstance object
+  variables			- a collection of VariableInstance objects that define the schema for the top-level virtual table (always VDATA); VariableInstance objects map a Variable object to its associated columns in the case data virtual tables;
+				  For example: a categorical question that has one Other Specify category would typically have three VariableInstance objects.
+					  The first represents the column that holds the responses to the category list
+					  The second represents the helper field that stores the open-ended responses
+					  The third represents the hlper field that stores the coded responses
 
   items				- a Types object containing a collection of all objects in the Fields, Helperfields, Pages, and Types collections for the document
   routing_items			- a flat list of RoutingItem objects associated with the document; a view of IDocument.Routing expanded according to the IRoutingItems.Filter property
@@ -150,12 +171,6 @@ read-only
   make_instance_name		- returns the full name of a specific iteration when given a partial full name and one or more indexes that represent the iterations
   make_reference_name		- returns a name that can be used as a reference for the reference_name property
   templates			- the templates object containing a list of all the templates for the current object; templates define the presentation of the object when an interview is run
-  variable_instance		- given a partial full name and one or more indexes that represent the iterations, this property returns the corresponding VariableInstance object
-  variables			- a collection of VariableInstance objects that define the schema for the top-level virtual table (always VDATA); VariableInstance objects map a Variable object to its associated columns in the case data virtual tables;
-				  For example: a categorical question that has one Other Specify category would typically have three VariableInstance objects.
-					  The first represents the column that holds the responses to the category list
-					  The second represents the helper field that stores the open-ended responses
-					  The third represents the hlper field that stores the coded responses
   versions			- a collection of versions defined in the document
   version_sets			- stores the version expressions that have been used to open a superversion
 read-write

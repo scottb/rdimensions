@@ -43,6 +43,14 @@ module Dimensions
       @category_map ||= Hash[ @node.xpath( 'categorymap/categoryid').map {|node| [ node[ 'name'], node[ 'value'].to_i ] }]
     end
 
+    def languages
+      @languages ||= @node.xpath( 'languages/language').map {|node| Language.new( self, node) }
+    end
+
+    def data_sources
+      @data_sources ||= @node.xpath( 'datasources/connection').map {|node| Connection.new( self, node) }.extend( DataSources).with_default( @node.at( 'datasources/@default').value)
+    end
+
     def contexts
       @contexts ||= Contexts.build_contexts_for( 'contexts', self)
     end
