@@ -30,16 +30,16 @@ module Dimensions
       when 'metadata'
 	:document
       else
-	raise "not yet implemented: #{@node.name}"
+	raise NotYetImplementedException, "type: #{@node.name}"
       end
     end
 
     def parent
-      raise "not yet implemented"
+      raise NoteYetImplementedException
     end
 
     def properties
-      raise "not yet implemented"
+      raise NoteYetImplementedException
     end
   end
 end

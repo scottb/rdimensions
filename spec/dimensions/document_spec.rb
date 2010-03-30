@@ -35,6 +35,10 @@ module Dimensions
 	@doc.object_type_value == :document
       end
 
+      it "knows its url" do
+	@doc.url.should == File.expand_path( P4550054)
+      end
+
       it "is its own document" do
 	@doc.document.should equal( @doc)
       end
@@ -97,7 +101,22 @@ module Dimensions
 	@doc.should have( :no).labels
       end
 
-      #it "#hacks" do ; @doc.node.xpath( '*').map( &:name).grep( /context/).should == ['hack'] ; end
+      #it "#hacks" do ; @doc.node.xpath( '*').map( &:name).grep( /types/).should == ['hack'] ; end
+      it "#hacks TBD" do
+	pending { @doc.fields }
+	pending { @doc.languages }
+	pending { @doc.pages }
+	pending { @doc.data_source_properties }
+	pending { @doc.data_sources }
+      end
+
+      it "raises NotYetImplementedException on deferred API entries" do
+	lambda { @doc.log_action }.should raise_error NotYetImplementedException
+	lambda { @doc.valid? }.should raise_error NotYetImplementedException
+	lambda { @doc.valid_version? }.should raise_error NotYetImplementedException
+	lambda { @doc.join }.should raise_error NotYetImplementedException
+	lambda { @doc.join_conflicts }.should raise_error NotYetImplementedException
+      end
 
       it "reminds me to remove the node accessors when I'm done" do
 	pending "a stable design" do
@@ -109,32 +128,28 @@ module Dimensions
 end
 =begin
 read-only
-  alias_map			- the alias map used for the current datasource
-  contexts			- a list of Context objects that define the *user contexts* that are used in the document; default to 'Question' and 'Analysis'
-  data_source_properties	- a collection of custom properties that relate to the current data_soruce (source-specific information)
-  data_sources			- a collection of DataSource objects which hold details of case data
   fields			- a heterogeneous collection of objects that defined the hierarchical structure of the questionnaire
-  find_object			- returns the object with the specified uuid
-  full_label			- the full label of the object
-  valid?
-  valid_version?
-  items				- a Types object containing a collection of all objects in the Fields, Helperfields, Pages, and Types collections for the document
-  join_conflicts
-  label_types			- a list of LabelTypes used in the document (defaults to 'Label')
   languages			- a list of languages used in the document
-  lcl				- an id representing the specified Language, Context, and Label Type for the document {:label_type, :context, :language}
-  level_depth			- a number indicating the depth of the level in which this object is located; equivalent to the number of arrays above this object
-  make_instance_name		- returns the full name of a specific iteration when given a partial full name and one or more indexes that represent the iterations
-  make_reference_name		- returns a name that can be used as a reference for the reference_name property
-  mdm_version			- the product version of mdm
   pages				- a collection of Page objects
   routing			- a collection of RoutingItem objects; defines the order in which the questions defined in the IDocument.Fields collection are to be asked
+  data_source_properties	- a collection of custom properties that relate to the current data_source (source-specific information)
+  data_sources			- a collection of DataSource objects which hold details of case data
+
+  items				- a Types object containing a collection of all objects in the Fields, Helperfields, Pages, and Types collections for the document
   routing_items			- a flat list of RoutingItem objects associated with the document; a view of IDocument.Routing expanded according to the IRoutingItems.Filter property
   save_logs			- a collection of SaveLog objects
   script_types			- a list of script types used for routing scripts; defaults to 'mrScriptBasic'
   selected_versions		- returns a SelectedVersions object, which stores the names of the currently selected versions
-  templates			- the templates object containing a list of all the templates for the current object; templates define the presentation of the object when an interview is run
+  full_label			- the full label of the object
+  find_object			- returns the object with the specified uuid
+  lcl				- an id representing the specified Language, Context, and Label Type for the document {:label_type, :context, :language}
+  level_depth			- a number indicating the depth of the level in which this object is located; equivalent to the number of arrays above this object
   types				- a list of template objects in the document
+
+  alias_map			- the alias map used for the current datasource
+  make_instance_name		- returns the full name of a specific iteration when given a partial full name and one or more indexes that represent the iterations
+  make_reference_name		- returns a name that can be used as a reference for the reference_name property
+  templates			- the templates object containing a list of all the templates for the current object; templates define the presentation of the object when an interview is run
   variable_instance		- given a partial full name and one or more indexes that represent the iterations, this property returns the corresponding VariableInstance object
   variables			- a collection of VariableInstance objects that define the schema for the top-level virtual table (always VDATA); VariableInstance objects map a Variable object to its associated columns in the case data virtual tables;
 				  For example: a categorical question that has one Other Specify category would typically have three VariableInstance objects.
@@ -150,10 +165,4 @@ read-write
   include_system_variables	- defines whether or not system variables are included in the document; setting this automatically creates the system variables
   open_mode			- the mode in which the document was opened
   script			- the mrScriptMetadata script for the document
-  url				- the name and location of the current metadata document file
-write-only
-  log_action			- creates an entry that will be included in the Save log when the MDD is next saved
-
-  labels -- a collection of Label objects, one for each LabelType
-  label -- shortcut to labels( 'Label').text
 =end

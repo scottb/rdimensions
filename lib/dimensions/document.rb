@@ -16,15 +16,19 @@ module Dimensions
       '5.0.3.3066'
     end
 
-    def document
-      self
-    end
-
     def initialize( xml)
       @xml = Nokogiri::XML( xml)
       @node = @xml.root.children.first
       @uuids = @node.xpath( '*[@id]').map {|node| [ node[ 'id'], node ]}
       yield self if block_given?
+    end
+
+    def document
+      self
+    end
+
+    def url
+      @node.document.url
     end
 
     def created_by_version
@@ -50,6 +54,14 @@ module Dimensions
     def routing_contexts
       @label_types ||= Contexts.build_contexts_for( 'routingcontexts', self)
     end
+
+    def log_action
+      raise NotYetImplementedException
+    end
+    alias valid? log_action
+    alias valid_version? log_action
+    alias join log_action
+    alias join_conflicts log_action
 
     def inspect
       "#<#{self.class}:#{object_id}>"
