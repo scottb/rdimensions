@@ -20,6 +20,16 @@ module Dimensions
     end
 
     def object_type_value
+      case @node.name
+      when 'variable'
+	:variable
+      when 'loop'
+	:array
+      when 'class'
+	:class
+      else
+	raise NotYetImplemented
+      end
     end
 
     def parent
