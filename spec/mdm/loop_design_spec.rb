@@ -4,7 +4,7 @@ module MDM
   describe LoopDesign do
     context 'in a valid mdd' do
       before do
-	@dataset = Metadata.read( FIXTURE_FILENAME)
+	@dataset = Metadata.read( P4550054)
       end
 
       it 'can identify the iterations' do

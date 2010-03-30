@@ -1,4 +1,5 @@
 require 'dimensions/mdm_object'
 require 'dimensions/mdm_node'
-require 'dimensions/document'
+require 'dimensions/contexts'
 require 'dimensions/context'
+require 'dimensions/document'

@@ -1,18 +1,4 @@
 module Dimensions
-  module Contexts
-    attr_reader :base
-    attr_writer :current
-
-    def current
-      @current || base
-    end
-
-    def with_base( s)
-      @base = s
-      self
-    end
-  end
-
   class Document
     include MDMObject
     attr_accessor :xml
@@ -27,6 +13,10 @@ module Dimensions
 
     def self.mdm_version
       '5.0.3.3066'
+    end
+
+    def document
+      self
     end
 
     def initialize( xml)
@@ -55,5 +45,11 @@ module Dimensions
     def contexts
       @contexts ||= @node.xpath( 'contexts/context').map {|node| Context.new( self, node) }.extend( Contexts).with_base( @node.at( 'contexts/@base').value)
     end
+
+    def inspect
+      "#<#{self.class}:#{object_id}>"
+    end
+
+    alias to_s inspect
   end
 end

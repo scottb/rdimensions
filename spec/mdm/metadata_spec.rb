@@ -3,14 +3,14 @@ require 'spec_helper'
 module MDM
   describe Metadata do
     it 'can be created from an IO object' do
-      file = File.open( FIXTURE_FILENAME)
+      file = File.open( P4550054)
       dataset = Metadata.new( file)
       file.close
       dataset.should_not be_nil
     end
 
     it 'can be created with just a filename' do
-      dataset = Metadata.read( FIXTURE_FILENAME)
+      dataset = Metadata.read( P4550054)
       dataset.should_not be_nil
     end
 
@@ -24,7 +24,7 @@ module MDM
 
     context 'with a valid mdd' do
       before do
-	@dataset = Metadata.read( FIXTURE_FILENAME)
+	@dataset = Metadata.read( P4550054)
       end
 
       context 'datasources' do

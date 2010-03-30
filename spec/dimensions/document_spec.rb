@@ -31,6 +31,10 @@ module Dimensions
 	@doc = Document.read( P4550054)
       end
 
+      it "is its own document" do
+	@doc.document.should equal( @doc)
+      end
+
       it "holds a reference to the underlying XML" do
 	@doc.xml.should be_a( Nokogiri::XML::Document)
       end
@@ -79,7 +83,7 @@ module Dimensions
 	@doc.contexts.base.should == 'Question'
       end
 
-      #it "#hacks" do; @doc.node.children.map( &:name).grep( /context/).should == ['hack'] ; end
+      #it "#hacks" do ; @doc.node.xpath( '*').map( &:name).grep( /context/).should == ['hack'] ; end
 
       it "reminds me to remove the node accessors when I'm done" do
 	pending "a stable design" do
