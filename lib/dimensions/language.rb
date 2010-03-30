@@ -1,6 +1,6 @@
 module Dimensions
   class Language < MDMNode
-    def name
+    def xml_name
       node[ 'name']
     end
   end

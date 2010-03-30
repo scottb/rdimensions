@@ -70,6 +70,7 @@ module Dimensions
     alias valid_version? log_action
     alias join log_action
     alias join_conflicts log_action
+    alias data_source_properties log_action
 
     def inspect
       "#<#{self.class}:#{object_id}>"

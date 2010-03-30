@@ -21,7 +21,7 @@ end
   # <variable id='guid' name='Q31NEG' ref='guid' />
 
 #p @dataset.loop_designs.find {|l| l.name == 'GRQ9' }.mddclass.field.variables.first.ref.node
-%{<variable id="711be68b-f561-435f-a442-dde3e677a4f7" name="Q9" type="3" min="1" mintype="3" max="1" maxtype="3">
+%q{<variable id="711be68b-f561-435f-a442-dde3e677a4f7" name="Q9" type="3" min="1" mintype="3" max="1" maxtype="3">
   <labels context="LABEL"><text context="QUESTION" xml:lang="en-US"/></labels>
   <categories global-name-space="-1">
     <category id="_a3a920a4-95b9-465e-8554-9af69dd5bc2a" name="_01">

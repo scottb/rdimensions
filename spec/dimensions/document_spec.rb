@@ -103,26 +103,29 @@ module Dimensions
 
       it "knows what languages are available" do
 	@doc.should have( 1).languages
-	@doc.languages.first.name.should == 'EN-US'
-	pending { @doc.languages.id.should == '0409' }
+	@doc.languages.first.xml_name.should == 'EN-US'
       end
 
       it "knows what datasources are available" do
 	@doc.should have( 1).data_sources
 	@doc.data_sources.default.should == 'mrRdbDsc2'
+	@doc.data_sources.current.should == 'mrRdbDsc2'
 	ds = @doc.data_sources.first
 	ds.name.should == 'mrRdbDsc2'
 	ds.dblocation.should =~ /^Provider=SQLOLEDB\.1;/
 	ds.cdscname.should == 'mrRdbDsc2'
 	ds.project.should == 'P4550054'
-	pending "verification against the documentation"
+      end
+
+      it "can enumerate the fields" do
+	pending
+	@doc.should have( 2).fields
       end
 
       #it "#hacks" do ; @doc.node.xpath( '*').map( &:name).grep( /data/).should == ['hack'] ; end
       it "#hacks TBD" do
 	pending { @doc.fields }
 	pending { @doc.pages }
-	pending { @doc.data_source_properties }
       end
 
       it "raises NotYetImplementedException on deferred API entries" do
@@ -131,6 +134,7 @@ module Dimensions
 	lambda { @doc.valid_version? }.should raise_error NotYetImplementedException
 	lambda { @doc.join }.should raise_error NotYetImplementedException
 	lambda { @doc.join_conflicts }.should raise_error NotYetImplementedException
+	lambda { @doc.data_source_properties }.should raise_error NotYetImplementedException
       end
 
       it "reminds me to remove the node accessors when I'm done" do
