@@ -4,8 +4,6 @@ module Dimensions
     include LabeledObject
 
     attr_accessor :xml
-    attr_reader :node, :uuids
-    def vdef( name) @defined_variables.find {|v| v.name == name } end
 
     def self.mdm_version
       '5.0.3.3066'
@@ -19,6 +17,7 @@ module Dimensions
     attr_reader :label_types
     attr_reader :routing_contexts
     attr_reader :fields
+    attr_reader :variables
     attr_reader :created_by_version
     attr_reader :last_updated_by_version
 
@@ -38,6 +37,7 @@ module Dimensions
     alias join log_action
     alias join_conflicts log_action
     alias data_source_properties log_action
+    alias pages log_action
 
     def inspect
       "#<#{self.class}:#{object_id}>"

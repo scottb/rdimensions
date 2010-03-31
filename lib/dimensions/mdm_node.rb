@@ -1,17 +1,15 @@
 module Dimensions
   class MDMNode
-    def initialize( document, node)
+    def initialize( document)
       @document = document
-      @node = node
     end
-    attr_reader :node
 
     def inspect
-      "#<#{self.class}:#{object_id} @document=#{@document}, @node=#{@node.path}>"
+      "#<#{self.class}:#{object_id} @document=#{@document}>"
     end
 
     def self.build( document, node, &block)
-      result = new( document, node)
+      result = new( document)
       result.instance_exec( document, node, &block) if block
       result
     end

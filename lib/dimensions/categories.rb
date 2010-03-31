@@ -8,7 +8,7 @@ module Dimensions
     def closure
       result = []
       result.concat( self)
-      result.concat( @document.categories.find {|c| c.uuid == @categoriesref }.closure)if @categoriesref
+      result.concat( @document.categories.find {|c| c.uuid == @categoriesref }.closure) if @categoriesref
       result.concat( @categories.closure) if @categories
       result
     end

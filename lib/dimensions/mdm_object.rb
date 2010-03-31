@@ -4,20 +4,16 @@ module Dimensions
     attr_reader :uuid
     attr_reader :name
 
-    def reference?
-      !@node[ 'ref'].nil?
-    end
-
     def system?
       @node.parent.name == 'system'
     end
 
     def parent
-      raise NoteYetImplementedException
+      raise NotYetImplementedException
     end
 
     def properties
-      raise NoteYetImplementedException
+      raise NotYetImplementedException
     end
   end
 end

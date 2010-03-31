@@ -7,7 +7,7 @@ module Dimensions
     end
 
     before do
-      @model_node = @doc.vdef( 'Status').categories.first
+      @model_node = @doc.variables.find {|v| v.name == 'Status' }.categories.first
     end
 
     it "has an entry for each context" do

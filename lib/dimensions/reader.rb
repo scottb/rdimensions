@@ -31,7 +31,7 @@ module Dimensions
 	  @data_sources.extend( DataSources).with_default( metadata.at( 'datasources/@default').value)
 
 	  # definition
-	  @defined_variables = metadata.xpath( 'definition/variable').map do |node|
+	  @variables = metadata.xpath( 'definition/variable').map do |node|
 	    Variable.build( self, node) do |doc,node|
 	      @uuid = node[ 'id']
 	      @name = node[ 'name']
@@ -53,7 +53,7 @@ module Dimensions
 	    case node.name
 	    when 'variable'
 	      if node.has_attribute?( 'ref')
-		@defined_variables.find {|v| v.uuid == node[ 'ref'] }
+		@variables.find {|v| v.uuid == node[ 'ref'] }
 	      else
 		Variable.build( self, node) do |doc,node|
 		  @uuid = node[ 'ref']
