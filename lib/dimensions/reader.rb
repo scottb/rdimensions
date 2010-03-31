@@ -38,10 +38,10 @@ module Dimensions
 	      @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
 	      @data_type = Document.get_type( node[ 'type'].to_i)
 	      @labels = Factory.build_labels_for( doc, node)
-	      @categories = Factory.build_categories_for( doc, node)
+	      @categories = Factory.build_categories_for( doc, node).first
 	    end
 	  end
-	  @defined_categories = Factory.build_categories_for( self, metadata.at( 'definition'))
+	  @categories = Factory.build_categories_for( self, metadata.at( 'definition'))
 	  # TODO: definition/page
 
 	  # system
@@ -61,7 +61,7 @@ module Dimensions
 		  @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
 		  @data_type = Document.get_type( node[ 'type'].to_i)
 		  @labels = Factory.build_labels_for( doc, node)
-		  @categories = Factory.build_categories_for( doc, node)
+		  @categories = Factory.build_categories_for( doc, node).first
 		end
 	      end
 	    when 'loop'
@@ -69,7 +69,7 @@ module Dimensions
 		@uuid = node[ 'ref']
 		@name = node[ 'name']
 		@labels = Factory.build_labels_for( doc, node)
-		@categories = Factory.build_categories_for( doc, node)
+		@categories = Factory.build_categories_for( doc, node).first
 	      end
 	    when 'class'
 	      nil
@@ -138,10 +138,18 @@ module Dimensions
     end
 
     def self.build_categories_for( doc, node)
-      node.xpath( 'categories/category').map do |n|
-	MDMElement.build( doc, n) do |doc,node|
+      node.xpath( 'categories').map do |cnode|
+	Categories.build( doc, cnode) do |doc,node|
 	  @name = node[ 'name']
-	  @labels = Factory.build_labels_for( doc, node)
+	  @uuid = node[ 'id']
+	  @categories = Factory.build_categories_for( doc, cnode).first
+	  @categoriesref = node[ 'categoriesref']
+	  @elements = node.xpath( 'category').map do |n|
+	    MDMElement.build( doc, n) do |doc,node|
+	      @name = node[ 'name']
+	      @labels = Factory.build_labels_for( doc, node)
+	    end
+	  end
 	end
       end
     end

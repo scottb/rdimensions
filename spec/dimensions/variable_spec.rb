@@ -50,7 +50,16 @@ module Dimensions
 	end
 
 	it "should know its categories" do
-	  pending { @q1.should have( 50).categories }
+	  ref = @q1.categories.categories.categoriesref
+	  cats = @doc.categories.find {|c| c.uuid == ref }
+	  cats.map( &:label).should include( 'Alabama', 'Virginia')
+	  cats.should have( 53).entries
+	end
+
+	it "should compute the closure" do
+	  cats = @q1.categories.closure
+	  cats.should have( 53).entries
+	  cats.map( &:label).should include( 'Alabama', 'Virginia')
 	end
       end
     end

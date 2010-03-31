@@ -11,6 +11,7 @@ module Dimensions
       '5.0.3.3066'
     end
 
+    attr_reader :categories
     attr_reader :category_map
     attr_reader :languages
     attr_reader :data_sources

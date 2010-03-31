@@ -4,6 +4,7 @@ module Dimensions
       @document = document
       @node = node
     end
+    attr_reader :node
 
     def inspect
       "#<#{self.class}:#{object_id} @document=#{@document}, @node=#{@node.path}>"
