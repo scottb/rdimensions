@@ -1,5 +1,4 @@
 module Dimensions
-  class MDMArray < MDMNode
-    include MDMObject
+  class MDMArray < Field
   end
 end

@@ -1,3 +1,4 @@
+require 'nokogiri'
 require 'dimensions/mdm_object'
 require 'dimensions/mdm_node'
 require 'dimensions/contexts'
@@ -13,3 +14,22 @@ require 'dimensions/variable'
 require 'dimensions/mdm_array'
 require 'dimensions/exceptions'
 require 'dimensions/document'
+require 'dimensions/reader'
+
+# module Contexts
+# module DataSources
+# module LabeledObject
+# module MDMObject
+#
+# class Document include MDMObject include LabeledObject
+# class MDMNode
+# class Connection < MDMNode
+# class Context < MDMNode
+# class Labels < MDMNode include MDMObject
+# class Language < MDMNode
+# class MDMArray < MDMNode include MDMObject
+# class MDMElement < MDMNode include MDMObject include LabeledObject
+# class Field < MDMNode include MDMObject include LabeledObject
+# class Variable < Field
+#
+# class NotYetImplementedException < Exception

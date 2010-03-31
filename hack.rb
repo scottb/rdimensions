@@ -6,8 +6,41 @@ def check_ref( ref)
   @dataset.lookup( ref).path
 end
 
-@dataset = Dimensions::Metadata.read( 'spec/fixtures/P4550054.mdd')
+@dataset = Dimensions::Document.read( 'spec/fixtures/P4550054.mdd')
+known_ids = {}
+forward_references = {}
+@dataset.node.xpath( './/@*').each do |attr|
+  if attr.name == 'id'
+    known_ids[ attr.value] = attr
+    puts "Forward reference to #{attr.path} resolved from #{forward_references[ attr.value].path}" if forward_references.has_key?( attr.value)
+  elsif attr.name =~ /ref$/ && !known_ids.has_key?( attr.value)
+    puts "Forward reference at #{attr.path}"
+    forward_references[ attr.value] = attr
+  end
+end
+%Q{
+Forward reference at definition/variable[70]/categories/categories/@categoriesref
+Forward reference at definition/variable[70]/categories/categories/versions/version[1]/categories/@categoriesref
+Forward reference at definition/variable[70]/categories/categories/versions/version[2]/categories/@categoriesref => c[3]
+Forward reference at definition/variable[101]/helperfields/class/fields/class/fields/variable[1]/@ref => v[102]
+Forward reference at definition/variable[101]/helperfields/class/fields/class/fields/variable[2]/@ref => v[103]
+Forward reference at definition/variable[101]/helperfields/variable/@ref => v[104]
+Forward reference at definition/variable[105]/helperfields/class/fields/class/fields/variable[1]/@ref => v[106]
+Forward reference at definition/variable[105]/helperfields/class/fields/class/fields/variable[2]/@ref => v[107]
+Forward reference at definition/variable[105]/helperfields/variable/@ref => v[108]
+Forward reference at definition/variable[124]/helperfields/variable/@ref => v[125]
+Forward reference at definition/variable[126]/helperfields/variable/@ref => v[126]
 
+Forward reference to definition/variable[102]/@id resolved from definition/variable[101]/helperfields/class/fields/class/fields/variable[1]/@ref
+Forward reference to definition/variable[103]/@id resolved from definition/variable[101]/helperfields/class/fields/class/fields/variable[2]/@ref
+Forward reference to definition/variable[104]/@id resolved from definition/variable[101]/helperfields/variable/@ref
+Forward reference to definition/variable[106]/@id resolved from definition/variable[105]/helperfields/class/fields/class/fields/variable[1]/@ref
+Forward reference to definition/variable[107]/@id resolved from definition/variable[105]/helperfields/class/fields/class/fields/variable[2]/@ref
+Forward reference to definition/variable[108]/@id resolved from definition/variable[105]/helperfields/variable/@ref
+Forward reference to definition/variable[125]/@id resolved from definition/variable[124]/helperfields/variable/@ref
+Forward reference to definition/variable[127]/@id resolved from definition/variable[126]/helperfields/variable/@ref
+Forward reference to definition/categories[3]/@id resolved from definition/variable[70]/categories/categories/versions/version[2]/categories/@categoriesref
+}
 #p @dataset.loop_designs.find {|l| l.name == 'GRQ9' }.mddclass.field.variables.map( &:name)
 #p @dataset.node.xpath( 'design/fields/loop/class/fields/variable[2]').size
 
@@ -48,7 +81,7 @@ end
   </categories>
   <helperfields/>
 </variable>}
-p @dataset.loop_designs.find {|l| l.name == 'LoopQ30ToQ31' }.mddclass.field.variables.first.ref.node
+#p @dataset.loop_designs.find {|l| l.name == 'LoopQ30ToQ31' }.mddclass.field.variables.first.ref.node
 %q{<variable id="31692551-9fd9-4cfa-b2c8-8affece3f817" name="Q30POS" type="2" min="1" mintype="3">
   <labels context="LABEL"><text context="QUESTION" xml:lang="en-US">&lt;table width='898px' bgcolor='#c6D0E9' cellspacing='0' cellpadding='5'&gt;&lt;tr&gt;&lt;td&gt;Looking at this statement again, &lt;u&gt;{#\.fhi}please highlight the words or phrases{#\.fes}&lt;/u&gt; that make you feel &lt;u&gt;{#\.fhi}more positive towards Sara Lee{#\.fes}&lt;/u&gt;.&lt;p/&gt;To highlight a word or section of the text, simply click on the first word that you wish to highlight with your mouse, and drag your mouse to the end of the word or section of the text that you want to highlight &#x2013; then release the mouse button.  If you make a mistake, and want to un-highlight a word or section of the text, simply click on that highlighted section of the text to remove the highlight.&lt;p/&gt;When all of the words or sections of text that you wish to highlight have been selected, click the &#x201C;Next&#x201D; button below to continue.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;p/&gt;&lt;table width='898px' bgcolor='#c6D0E9' cellspacing='0' cellpadding='5'&gt;&lt;tr&gt;&lt;td&gt;&lt;div id='stm1' class='mercuryanalytics_text_selector' &gt;{@}&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</text></labels>
   <helperfields id="7f98f6a9-ea48-49ff-98ad-fd276c42ec43" name="@helperfields" global-name-space="-1">

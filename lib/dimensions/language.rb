@@ -1,7 +1,5 @@
 module Dimensions
   class Language < MDMNode
-    def xml_name
-      node[ 'name']
-    end
+    attr_accessor :xml_name
   end
 end

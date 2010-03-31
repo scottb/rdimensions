@@ -6,28 +6,16 @@ module Dimensions
       @doc = Document.read( P4550054)
     end
 
-    context "reference" do
-      before do
-	@q2 = Variable.new( @doc, @doc.node.at( 'design/fields/variable[38]'))
-      end
-
-      it "knows its basic information" do
-	@q2.name.should == 'Q2'
-	@q2.should be_a_reference
-	@q2.object_type_value.should == :variable
-      end
-    end
-
     context "definition" do
       context "with case data" do
 	before do
-	  @q2 = Variable.new( @doc, @doc.node.at( 'definition/variable[71]'))
+	  @q2 = @doc.fields.find {|f| f.name == 'Q2' }
 	end
 
 	it "knows its basic information" do
 	  @q2.name.should == 'Q2'
 	  @q2.should_not be_a_reference
-	  @q2.object_type_value.should == :variable
+	  @q2.should be_a( Variable)
 	  @q2.should have_case_data
 	  @q2.data_type.should == :category
 	end
@@ -45,7 +33,7 @@ module Dimensions
 
       context "without case data" do
 	before do
-	  @fhi = Variable.new( @doc, @doc.node.at( 'definition/variable[1]'))
+	  @fhi = @doc.fields.find {|f| f.name == 'FHI' }
 	end
 
 	it "knows its basic information" do
@@ -55,19 +43,9 @@ module Dimensions
 	end
       end
 
-      context "other types" do
-	it "should recognize the 'none' type" do
-	  Variable.new( @doc, @doc.node.at( 'definition/variable[50]')).data_type.should == :none
-	end
-
-	it "should recognize text types" do
-	  Variable.new( @doc, @doc.node.at( 'definition/variable[58]')).data_type.should == :text
-	end
-      end
-
       context "nested categories" do
 	before do
-	  @q1 = Variable.new( @doc, @doc.node.at( 'definition/variable[70]'))
+	  @q1 = @doc.fields.find {|f| f.name == 'Q1' }
 	end
 
 	it "should know its categories" do

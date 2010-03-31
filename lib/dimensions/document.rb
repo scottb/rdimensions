@@ -2,80 +2,31 @@ module Dimensions
   class Document
     include MDMObject
     include LabeledObject
+
     attr_accessor :xml
     attr_reader :node, :uuids
-
-    def self.read( filename, &block)
-      f = open( filename)
-      result = Document.new( f, &block)
-      f.close
-      result
-    end
+    def vdef( name) @defined_variables.find {|v| v.name == name } end
 
     def self.mdm_version
       '5.0.3.3066'
     end
 
-    def initialize( xml)
-      @xml = Nokogiri::XML( xml)
-      @node = @xml.root.children.first
-      @uuids = Hash[ @node.xpath( './/*[@id]').map {|node| [ node[ 'id'], node ]}]
-      yield self if block_given?
-    end
+    attr_reader :category_map
+    attr_reader :languages
+    attr_reader :data_sources
+    attr_reader :contexts
+    attr_reader :label_types
+    attr_reader :routing_contexts
+    attr_reader :fields
+    attr_reader :created_by_version
+    attr_reader :last_updated_by_version
 
     def document
       self
     end
 
     def url
-      @node.document.url
-    end
-
-    def created_by_version
-      @created_by_version ||= @node.at( 'versionlist/version[1]/@mdmversion').value
-    end
-
-    def last_updated_by_version
-      @created_by_version ||= @node.at( 'versionlist/version[last()]/@mdmversion').value
-    end
-
-    def category_map
-      @category_map ||= Hash[ @node.xpath( 'categorymap/categoryid').map {|node| [ node[ 'name'], node[ 'value'].to_i ] }]
-    end
-
-    def languages
-      @languages ||= @node.xpath( 'languages/language').map {|node| Language.new( self, node) }
-    end
-
-    def data_sources
-      @data_sources ||= @node.xpath( 'datasources/connection').map {|node| Connection.new( self, node) }.extend( DataSources).with_default( @node.at( 'datasources/@default').value)
-    end
-
-    def contexts
-      @contexts ||= Contexts.build_contexts_for( 'contexts', self)
-    end
-
-    def label_types
-      @label_types ||= Contexts.build_contexts_for( 'labeltypes', self)
-    end
-
-    def routing_contexts
-      @label_types ||= Contexts.build_contexts_for( 'routingcontexts', self)
-    end
-
-    def fields
-      @fields ||= @node.at( 'design/fields').children.map do |node|
-	case node.name
-	when 'variable'
-	  Variable.new( self, node)
-	when 'loop'
-	  MDMArray.new( self, node)
-	when 'class'
-	  nil
-	else
-	  nil
-	end
-      end.compact
+      @xml.url
     end
 
     def log_action
@@ -90,7 +41,22 @@ module Dimensions
     def inspect
       "#<#{self.class}:#{object_id}>"
     end
-
     alias to_s inspect
+
+private
+    def self.map_object_type_value( node_name)
+      case node_name
+      when 'variable'
+	:variable
+      when 'loop'
+	:array
+      when 'class'
+	:class
+      when 'metadata'
+	:document
+      else
+	raise NotYetImplementedException, "type: #{node_name}"
+      end
+    end
   end
 end

@@ -1,42 +1,14 @@
 require 'spec_helper'
 
 module Dimensions
-  describe MDMObject do
-    o = Object.new
-    o.extend( MDMObject)
-    [:reference?, :system?, :object_type_value, :parent, :properties, :uuid, :document, :name].each do |sym|
-      o.respond_to?( sym).should == true
-    end
-  end
-
   describe Document do
-    it "is an MDMObject" do
-      f = open( P4550054)
-      doc = Document.new( f)
-      f.close
-      doc.should be_a( MDMObject)
-    end
-
     it "knows what version of the MDM interface it supports" do
       Document.mdm_version.should == '5.0.3.3066'
     end
 
-    it "can be read from a file" do
-      doc = Document.read( P4550054)
-      doc.should_not be_nil
-    end
-
     context "with a valid MDD file" do
-      before do
+      before( :all) do
 	@doc = Document.read( P4550054)
-      end
-
-      it "knows it's a document" do
-	@doc.object_type_value == :document
-      end
-
-      it "knows its url" do
-	@doc.url.should == File.expand_path( P4550054)
       end
 
       it "is its own document" do
@@ -122,7 +94,7 @@ module Dimensions
 	@doc.fields.map( &:name).should include( 'Q1', 'GRQ9', 'LoopQ27ToQ29', 'LoopQ30ToQ31')
       end
 
-      #it "#hacks" do ; @doc.node.xpath( '*').map( &:name).grep( /data/).should == ['hack'] ; end
+      #it "#hacks" do ; @doc.node.xpath( 'datasources/*').map( &:name).grep( /./).should == ['hack'] ; end
       it "#hacks TBD" do
 	pending { @doc.pages }
       end

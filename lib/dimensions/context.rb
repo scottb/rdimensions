@@ -1,7 +1,5 @@
 module Dimensions
   class Context < MDMNode
-    def name
-      @node[ 'name']
-    end
+    attr_reader :name
   end
 end

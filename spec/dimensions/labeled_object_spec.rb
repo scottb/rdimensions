@@ -2,10 +2,12 @@ require 'spec_helper'
 
 module Dimensions
   describe LabeledObject do
+    before( :all) do
+      @doc = Document.read( P4550054)
+    end
+
     before do
-      doc = Document.read( P4550054)
-      @model_node = MDMNode.new( doc, doc.node.at( 'definition/variable[129]/categories/category[9]'))
-      @model_node.extend( LabeledObject)
+      @model_node = @doc.vdef( 'Status').categories.first
     end
 
     it "has an entry for each context" do
@@ -17,7 +19,7 @@ module Dimensions
 	@label = @model_node.labels[ :label]
       end
 
-      it "is knows its context" do
+      it "knows its context" do
 	@label.context.should == 'LABEL'
       end
 
@@ -27,10 +29,10 @@ module Dimensions
 
       it "has a string for each language" do
 	@label[ :question].should have( 20).entries
-	@label[ :question][ 'en-US'].should == 'Reviewed'
-	@label[ :question][ 'de-DE'].should == 'Durchsicht'
-	@label[ :analysis][ 'en-US'].should == 'Reviewed'
-	@label[ :analysis][ 'de-DE'].should == 'Durchsicht'
+	@label[ :question][ 'en-US'].should == 'Completed successfully'
+	@label[ :question][ 'de-DE'].should == 'Erfolgreich abgeschlossen'
+	@label[ :analysis][ 'en-US'].should == 'Completed successfully'
+	@label[ :analysis][ 'de-DE'].should == 'Erfolgreich abgeschlossen'
       end
     end
   end
