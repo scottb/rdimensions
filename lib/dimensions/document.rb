@@ -44,18 +44,28 @@ module Dimensions
     alias to_s inspect
 
 private
-    def self.map_object_type_value( node_name)
-      case node_name
-      when 'variable'
-	:variable
-      when 'loop'
-	:array
-      when 'class'
-	:class
-      when 'metadata'
-	:document
-      else
-	raise NotYetImplementedException, "type: #{node_name}"
+    def self.get_type( type)
+      case type
+	when 0
+	  :none
+	when 1
+	  :integer
+	when 2
+	  :text
+	when 3
+	  :category
+	when 4
+	  :object
+	when 5
+	  :date
+	when 6
+	  :double
+	when 7
+	  :boolean
+	when 8
+	  :level
+	else
+	  type
       end
     end
   end

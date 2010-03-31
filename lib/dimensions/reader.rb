@@ -36,7 +36,7 @@ module Dimensions
 	      @uuid = node[ 'id']
 	      @name = node[ 'name']
 	      @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
-	      @data_type = Factory.get_type( node[ 'type'].to_i)
+	      @data_type = Document.get_type( node[ 'type'].to_i)
 	      @labels = Factory.build_labels_for( doc, node)
 	      @categories = Factory.build_categories_for( doc, node)
 	    end
@@ -59,7 +59,7 @@ module Dimensions
 		  @uuid = node[ 'ref']
 		  @name = node[ 'name']
 		  @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
-		  @data_type = Factory.get_type( node[ 'type'].to_i)
+		  @data_type = Document.get_type( node[ 'type'].to_i)
 		  @labels = Factory.build_labels_for( doc, node)
 		  @categories = Factory.build_categories_for( doc, node)
 		end
@@ -140,6 +140,7 @@ module Dimensions
     def self.build_categories_for( doc, node)
       node.xpath( 'categories/category').map do |n|
 	MDMElement.build( doc, n) do |doc,node|
+	  @name = node[ 'name']
 	  @labels = Factory.build_labels_for( doc, node)
 	end
       end
@@ -153,32 +154,6 @@ module Dimensions
 	result[ context][ node[ 'lang']] = node.content
       end
       result
-    end
-
-
-    def self.get_type( type)
-      case type
-	when 0
-	  :none
-	when 1
-	  :integer
-	when 2
-	  :text
-	when 3
-	  :category
-	when 4
-	  :object
-	when 5
-	  :date
-	when 6
-	  :double
-	when 7
-	  :boolean
-	when 8
-	  :level
-	else
-	  type
-      end
     end
   end
 end

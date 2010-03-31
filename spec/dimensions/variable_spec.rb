@@ -27,6 +27,7 @@ module Dimensions
 	it "knows its categories" do
 	  @q2.should have( 7).categories
 	  cats = @q2.categories
+	  cats.map( &:name).should == ['_01', '_02', '_03', '_04', '_05', '_06', '_07']
 	  cats.map( &:label).should == ['Under 18', '18-24', '25-34', '35-44', '45-54', '55-64', '65 or older']
 	end
       end
