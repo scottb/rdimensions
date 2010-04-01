@@ -39,6 +39,7 @@ module Dimensions
 	mdm_class.should have( 1).fields
 	field = mdm_class.fields.first
 	field.name.should == 'Q9'
+	field.full_name.should == 'GRQ9[..].Q9'
       end
 
       it "allows navigation" do

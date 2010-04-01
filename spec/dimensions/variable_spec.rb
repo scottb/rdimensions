@@ -63,8 +63,7 @@ module Dimensions
 	end
 
 	it "should know its categories" do
-	  ref = @q1.categories.categories.categoriesref
-	  cats = @doc.categories.find {|c| c.uuid == ref }
+	  cats = @q1.categories.categories
 	  cats.map( &:label).should include( 'Alabama', 'Virginia')
 	  cats.should have( 53).entries
 	end

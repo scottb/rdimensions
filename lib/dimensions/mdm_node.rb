@@ -9,7 +9,7 @@ module Dimensions
     attr_accessor :parent
 
     def inspect
-      "#<#{self.class}:#{object_id} @document=#{@document}>"
+      "#<#{self.class}:#{object_id} @document=#{@document.inspect}>"
     end
 
     def self.build( parent, node, &block)

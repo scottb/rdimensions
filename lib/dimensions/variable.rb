@@ -11,8 +11,15 @@ module Dimensions
 
   class VariableProxy < MDMNode
     include Variable
+    attr_accessor :name
+
+    def full_name
+      "#{parent.name_prefix}#{name}"
+    end
+
     def method_missing( method, *args, &block)
-      @delegate.send( method, *args, &block) if @delegate.respond_to?( method)
+      return @delegate.send( method, *args, &block) if @delegate.respond_to?( method)
+      super
     end
 
     def respond_to?( method)

@@ -8,7 +8,6 @@ module Dimensions
     def closure
       result = []
       result.concat( self)
-      result.concat( @document.categories.find {|c| c.uuid == @categoriesref }.closure) if @categoriesref
       result.concat( @categories.closure) if @categories
       result
     end
@@ -20,6 +19,25 @@ module Dimensions
     def method_missing( method, *args, &block)
       return @elements.send( method, *args, &block) if @elements.respond_to?( method)
       super
+    end
+  end
+
+  class CategoriesProxy < MDMNode
+    def delegate
+      @delegate ||= @document.categories.find {|c| c.uuid == @categoriesref }
+    end
+
+    def respond_to?( method)
+      delegate.respond_to?( method) || super
+    end
+
+    def method_missing( method, *args, &block)
+      return delegate.send( method, *args, &block) if delegate.respond_to?( method)
+      super
+    end
+
+    def inspect
+      "#<#{self.class}:#{object_id} @document=#{@document.inspect}, @delegate=#{@delegate.inspect}>"
     end
   end
 end

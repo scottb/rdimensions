@@ -17,7 +17,6 @@ module Dimensions
 	result.instance_exec do
 	  @xml = Nokogiri::XML( source)
 	  metadata = @xml.root.children.first
-	  @uuids = Hash[ metadata.xpath( './/*[@id]').map {|node| [ node[ 'id'], node ]}]
 
 	  # datasources
 	  @data_sources = metadata.xpath( 'datasources/connection').map do |node|
@@ -108,6 +107,7 @@ module Dimensions
 	when 'variable'
 	  if node.has_attribute?( 'ref')
 	    VariableProxy.build( owner, node) do
+	      @name = node[ 'name']
 	      @delegate = owner.document.variables.find {|v| v.uuid == node[ 'ref'] }
 	    end
 	  else
@@ -149,15 +149,20 @@ module Dimensions
 
     def self.build_categories_for( owner, node)
       node.xpath( 'categories').map do |cnode|
-	Categories.build( owner, cnode) do |node|
-	  @name = node[ 'name']
-	  @uuid = node[ 'id']
-	  @categories = Factory.build_categories_for( self, cnode).first
-	  @categoriesref = node[ 'categoriesref']
-	  @elements = node.xpath( 'category').map do |n|
-	    MDMElement.build( owner, n) do |node|
-	      @name = node[ 'name']
-	      @labels = Factory.build_labels_for( node)
+	if cnode.has_attribute?( 'categoriesref')
+	  CategoriesProxy.build( owner, cnode) do |node|
+	    @categoriesref = node[ 'categoriesref']
+	  end
+	else
+	  Categories.build( owner, cnode) do |node|
+	    @name = node[ 'name']
+	    @uuid = node[ 'id']
+	    @categories = Factory.build_categories_for( self, cnode).first
+	    @elements = node.xpath( 'category').map do |n|
+	      MDMElement.build( owner, n) do |node|
+		@name = node[ 'name']
+		@labels = Factory.build_labels_for( node)
+	      end
 	    end
 	  end
 	end
