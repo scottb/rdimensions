@@ -28,7 +28,7 @@ module Dimensions
 	      @project = node[ 'project']
 	    end
 	  end
-	  @data_sources.extend( DataSources).with_default( metadata.at( 'datasources/@default').value)
+	  @data_sources.extend( DataSources).with_default( metadata.xpath( 'datasources/@default').first.value)
 
 	  # definition
 	  @variables = metadata.xpath( 'definition/variable').map do |node|
@@ -42,7 +42,7 @@ module Dimensions
 	      @mdm_class = Factory.build_class_for( doc, node)
 	    end
 	  end
-	  @categories = Factory.build_categories_for( self, metadata.at( 'definition'))
+	  @categories = Factory.build_categories_for( self, metadata.xpath( 'definition').first)
 	  # TODO: definition/page
 
 	  # system
@@ -65,7 +65,7 @@ module Dimensions
 	      @name = node[ 'name']
 	    end
 	  end
-	  @contexts.extend( Contexts).with_base( metadata.at( 'contexts/@base').value)
+	  @contexts.extend( Contexts).with_base( metadata.xpath( 'contexts/@base').first.value)
 
 	  # labeltypes
 	  @label_types = metadata.xpath( 'labeltypes/context').map do |node|
@@ -73,7 +73,7 @@ module Dimensions
 	      @name = node[ 'name']
 	    end
 	  end
-	  @label_types.extend( Contexts).with_base( metadata.at( 'labeltypes/@base').value)
+	  @label_types.extend( Contexts).with_base( metadata.xpath( 'labeltypes/@base').first.value)
 
 	  # routingcontexts
 	  @routing_contexts = metadata.xpath( 'routingcontexts/context').map do |node|
@@ -81,7 +81,7 @@ module Dimensions
 	      @name = node[ 'name']
 	    end
 	  end
-	  @routing_contexts.extend( Contexts).with_base( metadata.at( 'routingcontexts/@base').value)
+	  @routing_contexts.extend( Contexts).with_base( metadata.xpath( 'routingcontexts/@base').first.value)
 
 	  # scripttypes
 	  # versions
@@ -89,8 +89,8 @@ module Dimensions
 	  # atoms
 
 	  # versionlist
-	  @created_by_version = metadata.at( 'versionlist/version[1]/@mdmversion').value
-	  @last_updated_by_version = metadata.at( 'versionlist/version[last()]/@mdmversion').value
+	  @created_by_version = metadata.xpath( 'versionlist/version[1]/@mdmversion').first.value
+	  @last_updated_by_version = metadata.xpath( 'versionlist/version[last()]/@mdmversion').first.value
 
 	  # categorymap
 	  @category_map = Hash[ metadata.xpath( 'categorymap/categoryid').map {|node| [ node[ 'name'], node[ 'value'].to_i ] }]
