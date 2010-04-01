@@ -1,16 +1,20 @@
 module Dimensions
   class MDMNode
-    def initialize( document)
-      @document = document
+    def initialize( parent)
+      @document = parent.document
+      @parent = parent
     end
+
+    attr_accessor :document
+    attr_accessor :parent
 
     def inspect
       "#<#{self.class}:#{object_id} @document=#{@document}>"
     end
 
-    def self.build( document, node, &block)
-      result = new( document)
-      result.instance_exec( document, node, &block) if block
+    def self.build( parent, node, &block)
+      result = new( parent)
+      result.instance_exec( node, &block) if block
       result
     end
 

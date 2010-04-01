@@ -10,6 +10,12 @@ module Dimensions
       @model_node = @doc.variables.find {|v| v.name == 'Status' }.categories.first
     end
 
+    it "knows its place in the document" do
+      @model_node.document.should equal( @doc)
+      @model_node.parent.should_not be_nil
+      @model_node.parent.should_not equal( @doc)
+    end
+
     it "has an entry for each context" do
       @model_node.should have( 1).labels
     end

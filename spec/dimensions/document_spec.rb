@@ -6,6 +6,14 @@ module Dimensions
       Document.mdm_version.should == '5.0.3.3066'
     end
 
+    it "can construct instance names from full names and indexes" do
+      Document.make_instance_name( 'GRQ9[..].Q9', '{_01}').should == 'GRQ9[{_01}].Q9'
+      Document.make_instance_name( 'GRQ9', '{_01}').should == 'GRQ9'
+      Document.make_instance_name( 'MyLoop[..].MyGrid[..].pref', '2', '{A}').should == 'MyLoop[2].MyGrid[{A}].pref'
+      Document.make_instance_name( 'MyLoop[..].MyGrid[..].pref', '2').should == 'MyLoop[2].MyGrid[..].pref'
+      Document.make_instance_name( 'MyLoop[..].MyGrid[..].pref').should == 'MyLoop[..].MyGrid[..].pref'
+    end
+
     context "with a valid MDD file" do
       before( :all) do
 	@doc = Document.read( P4550054)

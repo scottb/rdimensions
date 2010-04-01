@@ -21,7 +21,7 @@ module Dimensions
 
 	  # datasources
 	  @data_sources = metadata.xpath( 'datasources/connection').map do |node|
-	    Connection.build( self, node) do |doc,node|
+	    Connection.build( self, node) do |node|
 	      @name = node[ 'name']
 	      @dblocation = node[ 'dblocation']
 	      @cdscname = node[ 'cdscname']
@@ -32,14 +32,14 @@ module Dimensions
 
 	  # definition
 	  @variables = metadata.xpath( 'definition/variable').map do |node|
-	    Variable.build( self, node) do |doc,node|
+	    VariableDefinition.build( self, node) do |node|
 	      @uuid = node[ 'id']
 	      @name = node[ 'name']
 	      @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
 	      @data_type = Document.get_type( node[ 'type'].to_i)
-	      @labels = Factory.build_labels_for( doc, node)
-	      @categories = Factory.build_categories_for( doc, node).first
-	      @mdm_class = Factory.build_class_for( doc, node)
+	      @labels = Factory.build_labels_for( node)
+	      @categories = Factory.build_categories_for( self, node).first
+	      @mdm_class = Factory.build_class_for( self, node)
 	    end
 	  end
 	  @categories = Factory.build_categories_for( self, metadata.xpath( 'definition').first)
@@ -54,14 +54,14 @@ module Dimensions
 
 	  # languages
 	  @languages = metadata.xpath( 'languages/language').map do |node|
-	    Language.build( self, node) do |doc,node|
+	    Language.build( self, node) do |node|
 	      @xml_name = node[ 'name']
 	    end
 	  end
 
 	  # contexts
 	  @contexts = metadata.xpath( 'contexts/context').map do |node|
-	    Context.build( self, node) do |doc,node|
+	    Context.build( self, node) do |node|
 	      @name = node[ 'name']
 	    end
 	  end
@@ -69,7 +69,7 @@ module Dimensions
 
 	  # labeltypes
 	  @label_types = metadata.xpath( 'labeltypes/context').map do |node|
-	    Context.build( self, node) do |doc,node|
+	    Context.build( self, node) do |node|
 	      @name = node[ 'name']
 	    end
 	  end
@@ -77,7 +77,7 @@ module Dimensions
 
 	  # routingcontexts
 	  @routing_contexts = metadata.xpath( 'routingcontexts/context').map do |node|
-	    Context.build( self, node) do |doc,node|
+	    Context.build( self, node) do |node|
 	      @name = node[ 'name']
 	    end
 	  end
@@ -95,40 +95,42 @@ module Dimensions
 	  # categorymap
 	  @category_map = Hash[ metadata.xpath( 'categorymap/categoryid').map {|node| [ node[ 'name'], node[ 'value'].to_i ] }]
 
-	  @labels = Factory.build_labels_for( self, metadata)
+	  @labels = Factory.build_labels_for( metadata)
 	end
 	result
       end
     end
 
   private
-    def self.build_fields_for( doc, node)
+    def self.build_fields_for( owner, node)
       node.xpath( 'fields').first.children.map do |node|
 	case node.name
 	when 'variable'
 	  if node.has_attribute?( 'ref')
-	    doc.variables.find {|v| v.uuid == node[ 'ref'] }
+	    VariableProxy.build( owner, node) do
+	      @delegate = owner.document.variables.find {|v| v.uuid == node[ 'ref'] }
+	    end
 	  else
-	    Variable.build( doc, node) do |doc,node|
+	    VariableDefinition.build( owner, node) do |node|
 	      @uuid = node[ 'ref']
 	      @name = node[ 'name']
 	      @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
 	      @data_type = Document.get_type( node[ 'type'].to_i)
-	      @labels = Factory.build_labels_for( doc, node)
-	      @categories = Factory.build_categories_for( doc, node).first
-	      @mdm_class = Factory.build_class_for( doc, node)
+	      @labels = Factory.build_labels_for( node)
+	      @categories = Factory.build_categories_for( self, node).first
+	      @mdm_class = Factory.build_class_for( self, node)
 	    end
 	  end
 	when 'loop'
-	  MDMArray.build( doc, node) do |doc,node|
+	  MDMArray.build( owner, node) do |node|
 	    @uuid = node[ 'ref']
 	    @name = node[ 'name']
-	    @labels = Factory.build_labels_for( doc, node)
-	    @categories = Factory.build_categories_for( doc, node).first
-	    @mdm_class = Factory.build_class_for( doc, node)
+	    @labels = Factory.build_labels_for( node)
+	    @categories = Factory.build_categories_for( self, node).first
+	    @mdm_class = Factory.build_class_for( self, node)
 	  end
 	when 'class'
-	  MDMClass.build( doc, node) do |doc,node|
+	  MDMClass.build( owner, node) do |node|
 	    @name = node[ 'name']
 	  end
 	else
@@ -137,38 +139,38 @@ module Dimensions
       end.compact
     end
 
-    def self.build_class_for( doc, node)
+    def self.build_class_for( owner, node)
       cnode = node.xpath( 'class').first
-      cnode && MDMClass.build( doc, cnode) do |doc,node|
+      cnode && MDMClass.build( owner, cnode) do |node|
 	@name = node[ 'name']
-	@fields = Factory.build_fields_for( doc, node)
+	@fields = Factory.build_fields_for( self, node)
       end
     end
 
-    def self.build_labels_for( doc, node)
+    def self.build_categories_for( owner, node)
+      node.xpath( 'categories').map do |cnode|
+	Categories.build( owner, cnode) do |node|
+	  @name = node[ 'name']
+	  @uuid = node[ 'id']
+	  @categories = Factory.build_categories_for( self, cnode).first
+	  @categoriesref = node[ 'categoriesref']
+	  @elements = node.xpath( 'category').map do |n|
+	    MDMElement.build( owner, n) do |node|
+	      @name = node[ 'name']
+	      @labels = Factory.build_labels_for( node)
+	    end
+	  end
+	end
+      end
+    end
+
+    def self.build_labels_for( node)
       result = {}
       node.xpath( 'labels').each do |n|
 	context = n[ 'context']
 	result[ context.downcase.to_sym] = Factory.build_text_index_for( n).extend( Label).with_context( context)
       end
       result
-    end
-
-    def self.build_categories_for( doc, node)
-      node.xpath( 'categories').map do |cnode|
-	Categories.build( doc, cnode) do |doc,node|
-	  @name = node[ 'name']
-	  @uuid = node[ 'id']
-	  @categories = Factory.build_categories_for( doc, cnode).first
-	  @categoriesref = node[ 'categoriesref']
-	  @elements = node.xpath( 'category').map do |n|
-	    MDMElement.build( doc, n) do |doc,node|
-	      @name = node[ 'name']
-	      @labels = Factory.build_labels_for( doc, node)
-	    end
-	  end
-	end
-      end
     end
 
     def self.build_text_index_for( node)

@@ -4,16 +4,12 @@ module Dimensions
     attr_reader :uuid
     attr_reader :name
 
-    def system?
-      @node.parent.name == 'system'
+    def full_name
+      "#{parent.name_prefix}#{name}"
     end
 
-    def parent
-      raise NotYetImplementedException
-    end
-
-    def properties
-      raise NotYetImplementedException
+    def name_prefix
+      "#{name}."
     end
   end
 end

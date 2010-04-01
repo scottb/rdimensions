@@ -29,6 +29,18 @@ module Dimensions
       @xml.url
     end
 
+    def name_prefix
+      ''
+    end
+
+    def self.make_instance_name( full_name, *indexes)
+      indexes = indexes.dup
+      while !indexes.empty? && full_name =~ /\.\./
+	full_name = $` + indexes.shift + $'
+      end
+      full_name
+    end
+
     def log_action
       raise NotYetImplementedException
     end
