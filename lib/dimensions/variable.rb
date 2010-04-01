@@ -1,5 +1,8 @@
 module Dimensions
   module Variable
+    def variable_instances
+      @variable_instances ||= [ VariableInstance.new( self, full_name) ]
+    end
   end
 
   class VariableDefinition < Field
@@ -14,7 +17,7 @@ module Dimensions
     attr_accessor :name
 
     def full_name
-      "#{parent.name_prefix}#{name}"
+      parent.base_name == '' ? name : "#{parent.base_name}.#{name}"
     end
 
     def method_missing( method, *args, &block)

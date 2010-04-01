@@ -34,7 +34,7 @@ module Dimensions
       @xml.url
     end
 
-    def name_prefix
+    def base_name
       ''
     end
 

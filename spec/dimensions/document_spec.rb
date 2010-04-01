@@ -103,10 +103,7 @@ module Dimensions
       end
 
       it "can enumerate the variable instances" do
-	#@doc.variable_instances.size.should be > 100
-	pending do
-	  @doc.should have( :many).variable_instances
-	end
+	@doc.should have( 203).variable_instances
       end
 
       it "raises NotYetImplementedException on deferred API entries" do

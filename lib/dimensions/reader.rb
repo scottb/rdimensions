@@ -14,21 +14,18 @@ module Dimensions
 	f.close
 	result
       end
-    end
 
-    def build_variable_instances
-      @variable_instances = fields.map do |field|
-	case field
-	when Variable
-	  field.name
-	when MDMArray
-	  "#{field.name}[..]"
-	when MDMClass
-	  "**#{field.name}**"
-	end
+      def sum( collection, identity = 0, &block)
+	return identity unless collection.size > 0
+	collection.inject( identity) {|sum, element| sum + element }
       end
     end
+
+    def variable_instances
+      @variable_instances ||= Document.sum( fields.map {|f| f.variable_instances }, [])
+    end
   end
+
 
   class Factory
     class << self
@@ -58,7 +55,6 @@ module Dimensions
 	  @last_updated_by_version = metadata.at_xpath( 'versionlist/version[last()]/@mdmversion').value
 	  @category_map = Hash[ metadata.xpath( 'categorymap/categoryid').map {|node| [ node[ 'name'], node[ 'value'].to_i ] }]
 
-	  @variable_instances = build_variable_instances
 	  @labels = Factory.build_labels_for( metadata)
 	end
 	result
@@ -89,6 +85,7 @@ module Dimensions
 
     def self.build_array_for( parent, node, system = false)
       MDMArray.build( parent, node) do |node|
+@node = node
 	@system = system
 	@uuid = node[ 'ref']
 	@name = node[ 'name']

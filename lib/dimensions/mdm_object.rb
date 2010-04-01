@@ -5,11 +5,11 @@ module Dimensions
     attr_reader :name
 
     def full_name
-      "#{parent.name_prefix}#{name}"
+      parent.base_name == '' ? name : "#{parent.base_name}.#{name}"
     end
 
-    def name_prefix
-      "#{name}."
+    def base_name
+      name
     end
   end
 end
