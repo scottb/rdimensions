@@ -36,7 +36,7 @@ module Dimensions
 	  # TODO: system
 	  # TODO: systemrouting
 	  # TODO: mappings
-	  @fields = Factory.build_fields_for( self, metadata.at_xpath( 'design'))
+	  @fields = Factory.build_fields_for( self, metadata.at_xpath( 'system')) + Factory.build_fields_for( self, metadata.at_xpath( 'design/fields'))
 	  @languages = metadata.xpath( 'languages/language').map {|node| Factory.build_language_for( self, node) }
 	  @contexts = Factory.build_contexts_for( self, metadata.at_xpath( 'contexts'))
 	  @label_types = Factory.build_contexts_for( self, metadata.at_xpath( 'labeltypes'))
@@ -78,7 +78,7 @@ module Dimensions
     end
 
     def self.build_fields_for( parent, node)
-      node.at_xpath( 'fields').children.map do |node|
+      node.children.map do |node|
 	case node.name
 	when 'variable'
 	  build_variable_for( parent, node)
@@ -104,7 +104,7 @@ module Dimensions
       cnode = node.at_xpath( 'class')
       cnode && MDMClass.build( parent, cnode) do |node|
 	@name = node[ 'name']
-	@fields = Factory.build_fields_for( self, node)
+	@fields = Factory.build_fields_for( self, node.at_xpath( 'fields'))
       end
     end
 
