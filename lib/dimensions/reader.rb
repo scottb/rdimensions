@@ -1,3 +1,10 @@
+class Nokogiri::XML::Element
+  # this is inexplicably missing from nokogiri 1.4.1
+  def at_xpath( path)
+    xpath( path).first
+  end
+end
+
 module Dimensions
   class Document
     class << self
@@ -22,24 +29,24 @@ module Dimensions
 	  @xml = Nokogiri::XML( source)
 	  metadata = @xml.root.children.first
 
-	  @data_sources = Factory.build_connections_for( self, metadata.xpath( 'datasources').first)
+	  @data_sources = Factory.build_connections_for( self, metadata.at_xpath( 'datasources'))
 	  @variables = metadata.xpath( 'definition/variable').map {|node| Factory.build_variable_for( self, node) }
-	  @categories = Factory.build_categories_for( self, metadata.xpath( 'definition').first)
+	  @categories = Factory.build_categories_for( self, metadata.at_xpath( 'definition'))
 	  # TODO: definition/page
 	  # TODO: system
 	  # TODO: systemrouting
 	  # TODO: mappings
-	  @fields = Factory.build_fields_for( self, metadata.xpath( 'design').first)
+	  @fields = Factory.build_fields_for( self, metadata.at_xpath( 'design'))
 	  @languages = metadata.xpath( 'languages/language').map {|node| Factory.build_language_for( self, node) }
-	  @contexts = Factory.build_contexts_for( self, metadata.xpath( 'contexts').first)
-	  @label_types = Factory.build_contexts_for( self, metadata.xpath( 'labeltypes').first)
-	  @routing_contexts = Factory.build_contexts_for( self, metadata.xpath( 'routingcontexts').first)
+	  @contexts = Factory.build_contexts_for( self, metadata.at_xpath( 'contexts'))
+	  @label_types = Factory.build_contexts_for( self, metadata.at_xpath( 'labeltypes'))
+	  @routing_contexts = Factory.build_contexts_for( self, metadata.at_xpath( 'routingcontexts'))
 	  # TODO: scripttypes
 	  # TODO: versions
 	  # TODO: savelogs
 	  # TODO: atoms
-	  @created_by_version = metadata.xpath( 'versionlist/version[1]/@mdmversion').first.value
-	  @last_updated_by_version = metadata.xpath( 'versionlist/version[last()]/@mdmversion').first.value
+	  @created_by_version = metadata.at_xpath( 'versionlist/version[1]/@mdmversion').value
+	  @last_updated_by_version = metadata.at_xpath( 'versionlist/version[last()]/@mdmversion').value
 	  @category_map = Hash[ metadata.xpath( 'categorymap/categoryid').map {|node| [ node[ 'name'], node[ 'value'].to_i ] }]
 
 	  @variable_instances = build_variable_instances
@@ -71,7 +78,7 @@ module Dimensions
     end
 
     def self.build_fields_for( parent, node)
-      node.xpath( 'fields').first.children.map do |node|
+      node.at_xpath( 'fields').children.map do |node|
 	case node.name
 	when 'variable'
 	  build_variable_for( parent, node)
@@ -94,7 +101,7 @@ module Dimensions
     end
 
     def self.build_class_for( parent, node)
-      cnode = node.xpath( 'class').first
+      cnode = node.at_xpath( 'class')
       cnode && MDMClass.build( parent, cnode) do |node|
 	@name = node[ 'name']
 	@fields = Factory.build_fields_for( self, node)
@@ -140,7 +147,7 @@ module Dimensions
     end
 
     def self.build_connections_for( parent, node)
-      default = node.xpath( '@default').first.value
+      default = node.at_xpath( '@default').value
       result = node.xpath( 'connection').map do |cnode|
 	Connection.build( parent, cnode) do |node|
 	  @name = node[ 'name']
