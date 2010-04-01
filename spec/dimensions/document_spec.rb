@@ -90,7 +90,7 @@ module Dimensions
       end
 
       it "can enumerate the fields" do
-	@doc.should have( 57 + 20).fields
+	@doc.should have( 57 + 20 + 1).fields
 	@doc.fields.map( &:name).should include( 'Q1', 'GRQ9', 'LoopQ27ToQ29', 'LoopQ30ToQ31')
       end
 

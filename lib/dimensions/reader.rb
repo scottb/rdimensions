@@ -39,6 +39,7 @@ module Dimensions
 	      @data_type = Document.get_type( node[ 'type'].to_i)
 	      @labels = Factory.build_labels_for( doc, node)
 	      @categories = Factory.build_categories_for( doc, node).first
+	      @mdm_class = Factory.build_class_for( doc, node)
 	    end
 	  end
 	  @categories = Factory.build_categories_for( self, metadata.at( 'definition'))
@@ -49,34 +50,7 @@ module Dimensions
 	  # mappings
 
 	  # design
-	  @fields = metadata.at( 'design/fields').children.map do |node|
-	    case node.name
-	    when 'variable'
-	      if node.has_attribute?( 'ref')
-		@variables.find {|v| v.uuid == node[ 'ref'] }
-	      else
-		Variable.build( self, node) do |doc,node|
-		  @uuid = node[ 'ref']
-		  @name = node[ 'name']
-		  @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
-		  @data_type = Document.get_type( node[ 'type'].to_i)
-		  @labels = Factory.build_labels_for( doc, node)
-		  @categories = Factory.build_categories_for( doc, node).first
-		end
-	      end
-	    when 'loop'
-	      MDMArray.build( self, node) do |doc,node|
-		@uuid = node[ 'ref']
-		@name = node[ 'name']
-		@labels = Factory.build_labels_for( doc, node)
-		@categories = Factory.build_categories_for( doc, node).first
-	      end
-	    when 'class'
-	      nil
-	    else
-	      nil
-	    end
-	  end.compact
+	  @fields = Factory.build_fields_for( self, metadata.xpath( 'design').first)
 
 	  # languages
 	  @languages = metadata.xpath( 'languages/language').map do |node|
@@ -128,6 +102,49 @@ module Dimensions
     end
 
   private
+    def self.build_fields_for( doc, node)
+      node.xpath( 'fields').first.children.map do |node|
+	case node.name
+	when 'variable'
+	  if node.has_attribute?( 'ref')
+	    doc.variables.find {|v| v.uuid == node[ 'ref'] }
+	  else
+	    Variable.build( doc, node) do |doc,node|
+	      @uuid = node[ 'ref']
+	      @name = node[ 'name']
+	      @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
+	      @data_type = Document.get_type( node[ 'type'].to_i)
+	      @labels = Factory.build_labels_for( doc, node)
+	      @categories = Factory.build_categories_for( doc, node).first
+	      @mdm_class = Factory.build_class_for( doc, node)
+	    end
+	  end
+	when 'loop'
+	  MDMArray.build( doc, node) do |doc,node|
+	    @uuid = node[ 'ref']
+	    @name = node[ 'name']
+	    @labels = Factory.build_labels_for( doc, node)
+	    @categories = Factory.build_categories_for( doc, node).first
+	    @mdm_class = Factory.build_class_for( doc, node)
+	  end
+	when 'class'
+	  MDMClass.build( doc, node) do |doc,node|
+	    @name = node[ 'name']
+	  end
+	else
+	  nil
+	end
+      end.compact
+    end
+
+    def self.build_class_for( doc, node)
+      cnode = node.xpath( 'class').first
+      cnode && MDMClass.build( doc, cnode) do |doc,node|
+	@name = node[ 'name']
+	@fields = Factory.build_fields_for( doc, node)
+      end
+    end
+
     def self.build_labels_for( doc, node)
       result = {}
       node.xpath( 'labels').each do |n|

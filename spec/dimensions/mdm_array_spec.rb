@@ -24,12 +24,16 @@ module Dimensions
 	@grq9.categories.map( &:name).should == ["_01", "_02", "_03", "_04", "_05"]
 	@grq9.categories.map( &:label).should == ["Packaged, pre-sliced bread, buns and rolls", "Sausage", "Hot dogs", "Lunch meat", "Frozen cakes, pies or other desserts"]
       end
+
+      it "knows its class" do
+	mdm_class = @grq9.mdm_class
+	mdm_class.name.should == "@class"
+	mdm_class.should have( 1).fields
+	field = mdm_class.fields.first
+	field.name.should == 'Q9'
+      end
     end
 
-#    context "helper variables" do
-#      before do
-#	@var = @doc.fields.find {|f| f.name == 'LoopQ27ToQ29' }
-#      end
-#    end
+# 'LoopQ27ToQ29'
   end
 end
