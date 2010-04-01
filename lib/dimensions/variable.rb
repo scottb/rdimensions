@@ -25,5 +25,9 @@ module Dimensions
     def respond_to?( method)
       @delegate.respond_to?( method) || super
     end
+
+    def inspect
+      "#<#{self.class}:#{object_id} @document=#{@document.inspect}, @delegate=#{@delegate.inspect}>"
+    end
   end
 end

@@ -18,11 +18,16 @@ module Dimensions
     attr_reader :routing_contexts
     attr_reader :fields
     attr_reader :variables
+    attr_reader :variable_instances
     attr_reader :created_by_version
     attr_reader :last_updated_by_version
 
     def document
       self
+    end
+
+    def parent
+      nil
     end
 
     def url

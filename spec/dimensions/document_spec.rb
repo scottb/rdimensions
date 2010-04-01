@@ -102,6 +102,13 @@ module Dimensions
 	@doc.fields.map( &:name).should include( 'Q1', 'GRQ9', 'LoopQ27ToQ29', 'LoopQ30ToQ31')
       end
 
+      it "can enumerate the variable instances" do
+	pending do
+	  @doc.variable_instances.size.should be > 78
+	  #@doc.should have( :many).variable_instances
+	end
+      end
+
       it "raises NotYetImplementedException on deferred API entries" do
 	lambda { @doc.pages }.should raise_error NotYetImplementedException
 	lambda { @doc.log_action }.should raise_error NotYetImplementedException

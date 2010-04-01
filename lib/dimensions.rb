@@ -15,6 +15,7 @@ require 'dimensions/field'
 require 'dimensions/variable'
 require 'dimensions/mdm_array'
 require 'dimensions/exceptions'
+require 'dimensions/variable_instance'
 require 'dimensions/document'
 require 'dimensions/reader'
 

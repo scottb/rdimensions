@@ -8,6 +8,10 @@ module Dimensions
 	result
       end
     end
+
+    def build_variable_instances
+      []
+    end
   end
 
   class Factory
@@ -18,82 +22,27 @@ module Dimensions
 	  @xml = Nokogiri::XML( source)
 	  metadata = @xml.root.children.first
 
-	  # datasources
-	  @data_sources = metadata.xpath( 'datasources/connection').map do |node|
-	    Connection.build( self, node) do |node|
-	      @name = node[ 'name']
-	      @dblocation = node[ 'dblocation']
-	      @cdscname = node[ 'cdscname']
-	      @project = node[ 'project']
-	    end
-	  end
-	  @data_sources.extend( DataSources).with_default( metadata.xpath( 'datasources/@default').first.value)
-
-	  # definition
-	  @variables = metadata.xpath( 'definition/variable').map do |node|
-	    VariableDefinition.build( self, node) do |node|
-	      @uuid = node[ 'id']
-	      @name = node[ 'name']
-	      @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
-	      @data_type = Document.get_type( node[ 'type'].to_i)
-	      @labels = Factory.build_labels_for( node)
-	      @categories = Factory.build_categories_for( self, node).first
-	      @mdm_class = Factory.build_class_for( self, node)
-	    end
-	  end
+	  @data_sources = Factory.build_connections_for( self, metadata.xpath( 'datasources').first)
+	  @variables = metadata.xpath( 'definition/variable').map {|node| Factory.build_variable_for( self, node) }
 	  @categories = Factory.build_categories_for( self, metadata.xpath( 'definition').first)
 	  # TODO: definition/page
-
-	  # system
-	  # systemrouting
-	  # mappings
-
-	  # design
+	  # TODO: system
+	  # TODO: systemrouting
+	  # TODO: mappings
 	  @fields = Factory.build_fields_for( self, metadata.xpath( 'design').first)
-
-	  # languages
-	  @languages = metadata.xpath( 'languages/language').map do |node|
-	    Language.build( self, node) do |node|
-	      @xml_name = node[ 'name']
-	    end
-	  end
-
-	  # contexts
-	  @contexts = metadata.xpath( 'contexts/context').map do |node|
-	    Context.build( self, node) do |node|
-	      @name = node[ 'name']
-	    end
-	  end
-	  @contexts.extend( Contexts).with_base( metadata.xpath( 'contexts/@base').first.value)
-
-	  # labeltypes
-	  @label_types = metadata.xpath( 'labeltypes/context').map do |node|
-	    Context.build( self, node) do |node|
-	      @name = node[ 'name']
-	    end
-	  end
-	  @label_types.extend( Contexts).with_base( metadata.xpath( 'labeltypes/@base').first.value)
-
-	  # routingcontexts
-	  @routing_contexts = metadata.xpath( 'routingcontexts/context').map do |node|
-	    Context.build( self, node) do |node|
-	      @name = node[ 'name']
-	    end
-	  end
-	  @routing_contexts.extend( Contexts).with_base( metadata.xpath( 'routingcontexts/@base').first.value)
-
-	  # scripttypes
-	  # versions
-	  # savelogs
-	  # atoms
-
-	  # versionlist
+	  @languages = metadata.xpath( 'languages/language').map {|node| Factory.build_language_for( self, node) }
+	  @contexts = Factory.build_contexts_for( self, metadata.xpath( 'contexts').first)
+	  @label_types = Factory.build_contexts_for( self, metadata.xpath( 'labeltypes').first)
+	  @routing_contexts = Factory.build_contexts_for( self, metadata.xpath( 'routingcontexts').first)
+	  # TODO: scripttypes
+	  # TODO: versions
+	  # TODO: savelogs
+	  # TODO: atoms
 	  @created_by_version = metadata.xpath( 'versionlist/version[1]/@mdmversion').first.value
 	  @last_updated_by_version = metadata.xpath( 'versionlist/version[last()]/@mdmversion').first.value
-
-	  # categorymap
 	  @category_map = Hash[ metadata.xpath( 'categorymap/categoryid').map {|node| [ node[ 'name'], node[ 'value'].to_i ] }]
 
+	  @variable_instances = build_variable_instances
 	  @labels = Factory.build_labels_for( metadata)
 	end
 	result
@@ -101,28 +50,33 @@ module Dimensions
     end
 
   private
-    def self.build_fields_for( owner, node)
+    def self.build_variable_for( parent, node)
+      if node.has_attribute?( 'ref')
+	VariableProxy.build( parent, node) do
+	  @name = node[ 'name']
+	  @delegate = parent.document.variables.find {|v| v.uuid == node[ 'ref'] }
+	  raise "Delegate not found for #{node[ 'ref']} at #{node.path}" unless @delegate
+	end
+      else
+	VariableDefinition.build( parent, node) do |node|
+	  @uuid = node[ 'id']
+	  @name = node[ 'name']
+	  @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
+	  @data_type = Document.get_type( node[ 'type'].to_i)
+	  @labels = Factory.build_labels_for( node)
+	  @categories = Factory.build_categories_for( self, node).first
+	  @mdm_class = Factory.build_class_for( self, node)
+	end
+      end
+    end
+
+    def self.build_fields_for( parent, node)
       node.xpath( 'fields').first.children.map do |node|
 	case node.name
 	when 'variable'
-	  if node.has_attribute?( 'ref')
-	    VariableProxy.build( owner, node) do
-	      @name = node[ 'name']
-	      @delegate = owner.document.variables.find {|v| v.uuid == node[ 'ref'] }
-	    end
-	  else
-	    VariableDefinition.build( owner, node) do |node|
-	      @uuid = node[ 'ref']
-	      @name = node[ 'name']
-	      @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
-	      @data_type = Document.get_type( node[ 'type'].to_i)
-	      @labels = Factory.build_labels_for( node)
-	      @categories = Factory.build_categories_for( self, node).first
-	      @mdm_class = Factory.build_class_for( self, node)
-	    end
-	  end
+	  build_variable_for( parent, node)
 	when 'loop'
-	  MDMArray.build( owner, node) do |node|
+	  MDMArray.build( parent, node) do |node|
 	    @uuid = node[ 'ref']
 	    @name = node[ 'name']
 	    @labels = Factory.build_labels_for( node)
@@ -130,7 +84,7 @@ module Dimensions
 	    @mdm_class = Factory.build_class_for( self, node)
 	  end
 	when 'class'
-	  MDMClass.build( owner, node) do |node|
+	  MDMClass.build( parent, node) do |node|
 	    @name = node[ 'name']
 	  end
 	else
@@ -139,27 +93,27 @@ module Dimensions
       end.compact
     end
 
-    def self.build_class_for( owner, node)
+    def self.build_class_for( parent, node)
       cnode = node.xpath( 'class').first
-      cnode && MDMClass.build( owner, cnode) do |node|
+      cnode && MDMClass.build( parent, cnode) do |node|
 	@name = node[ 'name']
 	@fields = Factory.build_fields_for( self, node)
       end
     end
 
-    def self.build_categories_for( owner, node)
+    def self.build_categories_for( parent, node)
       node.xpath( 'categories').map do |cnode|
 	if cnode.has_attribute?( 'categoriesref')
-	  CategoriesProxy.build( owner, cnode) do |node|
+	  CategoriesProxy.build( parent, cnode) do |node|
 	    @categoriesref = node[ 'categoriesref']
 	  end
 	else
-	  Categories.build( owner, cnode) do |node|
+	  Categories.build( parent, cnode) do |node|
 	    @name = node[ 'name']
 	    @uuid = node[ 'id']
 	    @categories = Factory.build_categories_for( self, cnode).first
 	    @elements = node.xpath( 'category').map do |n|
-	      MDMElement.build( owner, n) do |node|
+	      MDMElement.build( parent, n) do |node|
 		@name = node[ 'name']
 		@labels = Factory.build_labels_for( node)
 	      end
@@ -167,6 +121,35 @@ module Dimensions
 	  end
 	end
       end
+    end
+
+    def self.build_language_for( parent, node)
+      Language.build( parent, node) do |node|
+	@xml_name = node[ 'name']
+      end
+    end
+
+    def self.build_contexts_for( parent, node)
+      base = node[ 'base']
+      result = node.xpath( 'context').map do |cnode|
+	Context.build( parent, cnode) do |node|
+	  @name = node[ 'name']
+	end
+      end
+      result.extend( Contexts).with_base( base)
+    end
+
+    def self.build_connections_for( parent, node)
+      default = node.xpath( '@default').first.value
+      result = node.xpath( 'connection').map do |cnode|
+	Connection.build( parent, cnode) do |node|
+	  @name = node[ 'name']
+	  @dblocation = node[ 'dblocation']
+	  @cdscname = node[ 'cdscname']
+	  @project = node[ 'project']
+	end
+      end
+      result.extend( DataSources).with_default( default)
     end
 
     def self.build_labels_for( node)
