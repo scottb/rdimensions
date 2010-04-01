@@ -6,5 +6,9 @@ module Dimensions
     attr_reader :categories
     attr_reader :data_type
     attr_reader :mdm_class
+
+    def system?
+      @system
+    end
   end
 end

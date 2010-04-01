@@ -1,6 +1,5 @@
 module Dimensions
-  class MDMClass < MDMNode
-    include MDMObject
+  class MDMClass < Field
     attr_reader :mdm_class
     attr_reader :fields
 

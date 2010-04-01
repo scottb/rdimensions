@@ -74,6 +74,16 @@ module Dimensions
 	  cats.map( &:label).should include( 'Alabama', 'Virginia')
 	end
       end
+
+      context "system variables" do
+	before do
+	  @respondent = @doc.fields.find {|f| f.name == 'Respondent' }
+	end
+
+	it "knows it's a system variable" do
+	  @respondent.should be_a_system
+	end
+      end
     end
   end
 end

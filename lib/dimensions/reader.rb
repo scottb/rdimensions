@@ -17,7 +17,16 @@ module Dimensions
     end
 
     def build_variable_instances
-      []
+      @variable_instances = fields.map do |field|
+	case field
+	when Variable
+	  field.name
+	when MDMArray
+	  "#{field.name}[..]"
+	when MDMClass
+	  "**#{field.name}**"
+	end
+      end
     end
   end
 
@@ -36,7 +45,7 @@ module Dimensions
 	  # TODO: system
 	  # TODO: systemrouting
 	  # TODO: mappings
-	  @fields = Factory.build_fields_for( self, metadata.at_xpath( 'system')) + Factory.build_fields_for( self, metadata.at_xpath( 'design/fields'))
+	  @fields = Factory.build_fields_for( self, metadata.at_xpath( 'system'), true) + Factory.build_fields_for( self, metadata.at_xpath( 'design/fields'))
 	  @languages = metadata.xpath( 'languages/language').map {|node| Factory.build_language_for( self, node) }
 	  @contexts = Factory.build_contexts_for( self, metadata.at_xpath( 'contexts'))
 	  @label_types = Factory.build_contexts_for( self, metadata.at_xpath( 'labeltypes'))
@@ -57,7 +66,7 @@ module Dimensions
     end
 
   private
-    def self.build_variable_for( parent, node)
+    def self.build_variable_for( parent, node, system = false)
       if node.has_attribute?( 'ref')
 	VariableProxy.build( parent, node) do
 	  @name = node[ 'name']
@@ -66,43 +75,47 @@ module Dimensions
 	end
       else
 	VariableDefinition.build( parent, node) do |node|
+	  @system = system
 	  @uuid = node[ 'id']
 	  @name = node[ 'name']
 	  @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
 	  @data_type = Document.get_type( node[ 'type'].to_i)
 	  @labels = Factory.build_labels_for( node)
 	  @categories = Factory.build_categories_for( self, node).first
-	  @mdm_class = Factory.build_class_for( self, node)
+	  @mdm_class = Factory.build_class_for( self, node.at_xpath( 'class'))
 	end
       end
     end
 
-    def self.build_fields_for( parent, node)
+    def self.build_array_for( parent, node, system = false)
+      MDMArray.build( parent, node) do |node|
+	@system = system
+	@uuid = node[ 'ref']
+	@name = node[ 'name']
+	@labels = Factory.build_labels_for( node)
+	@categories = Factory.build_categories_for( self, node).first
+	@mdm_class = Factory.build_class_for( self, node.at_xpath( 'class'), system)
+      end
+    end
+
+    def self.build_fields_for( parent, node, system = false)
       node.children.map do |node|
 	case node.name
 	when 'variable'
-	  build_variable_for( parent, node)
+	  Factory.build_variable_for( parent, node, system)
 	when 'loop'
-	  MDMArray.build( parent, node) do |node|
-	    @uuid = node[ 'ref']
-	    @name = node[ 'name']
-	    @labels = Factory.build_labels_for( node)
-	    @categories = Factory.build_categories_for( self, node).first
-	    @mdm_class = Factory.build_class_for( self, node)
-	  end
+	  Factory.build_array_for( parent, node, system)
 	when 'class'
-	  MDMClass.build( parent, node) do |node|
-	    @name = node[ 'name']
-	  end
+	  Factory.build_class_for( parent, node, system)
 	else
 	  nil
 	end
       end.compact
     end
 
-    def self.build_class_for( parent, node)
-      cnode = node.at_xpath( 'class')
+    def self.build_class_for( parent, cnode, system = false)
       cnode && MDMClass.build( parent, cnode) do |node|
+	@system = system
 	@name = node[ 'name']
 	@fields = Factory.build_fields_for( self, node.at_xpath( 'fields'))
       end
