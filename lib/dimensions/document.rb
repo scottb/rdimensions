@@ -17,7 +17,6 @@ module Dimensions
     end
 
     def parent
-      nil
     end
 
     def url
