@@ -14,15 +14,6 @@ module Dimensions
 	f.close
 	result
       end
-
-      def sum( collection, identity = 0, &block)
-	return identity unless collection.size > 0
-	collection.inject( identity) {|sum, element| sum + element }
-      end
-    end
-
-    def variable_instances
-      @variable_instances ||= Document.sum( fields.map {|f| f.variable_instances }, [])
     end
   end
 

@@ -3,24 +3,14 @@ module Dimensions
     include MDMObject
     include LabeledObject
 
-    attr_accessor :xml
-
     def self.mdm_version
       '5.0.3.3066'
     end
 
-    attr_reader :categories
-    attr_reader :category_map
-    attr_reader :languages
-    attr_reader :data_sources
-    attr_reader :contexts
-    attr_reader :label_types
-    attr_reader :routing_contexts
-    attr_reader :fields
-    attr_reader :variables
-    attr_reader :variable_instances
-    attr_reader :created_by_version
-    attr_reader :last_updated_by_version
+    attr_reader :xml
+    attr_reader :categories, :category_map, :languages, :data_sources, :contexts
+    attr_reader :label_types, :routing_contexts, :fields, :variables
+    attr_reader :created_by_version, :last_updated_by_version
 
     def document
       self
@@ -36,6 +26,14 @@ module Dimensions
 
     def base_name
       ''
+    end
+
+    def variable_instances
+      @variable_instances ||= build_variable_instances
+    end
+
+    def build_variable_instances
+      Document.sum fields.map {|f| f.variable_instances }, []
     end
 
     def self.make_instance_name( full_name, *indexes)
@@ -61,29 +59,35 @@ module Dimensions
     end
     alias to_s inspect
 
-private
-    def self.get_type( type)
-      case type
-	when 0
-	  :none
-	when 1
-	  :integer
-	when 2
-	  :text
-	when 3
-	  :category
-	when 4
-	  :object
-	when 5
-	  :date
-	when 6
-	  :double
-	when 7
-	  :boolean
-	when 8
-	  :level
-	else
-	  type
+    class << self
+      def get_type( type)
+	case type
+	  when 0
+	    :none
+	  when 1
+	    :integer
+	  when 2
+	    :text
+	  when 3
+	    :category
+	  when 4
+	    :object
+	  when 5
+	    :date
+	  when 6
+	    :double
+	  when 7
+	    :boolean
+	  when 8
+	    :level
+	  else
+	    type
+	end
+      end
+
+      def sum( collection, identity = 0, &block)
+	return identity unless collection.size > 0
+	collection.inject( identity) {|sum, element| sum + element }
       end
     end
   end

@@ -14,7 +14,7 @@ module Dimensions
 
   class VariableProxy < MDMNode
     include Variable
-    attr_accessor :name
+    attr_reader :name
 
     def full_name
       parent.base_name == '' ? name : "#{parent.base_name}.#{name}"

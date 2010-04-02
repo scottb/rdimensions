@@ -1,6 +1,6 @@
 module Dimensions
   module LabeledObject
-    attr_accessor :labels
+    attr_reader :labels
 
     def label
       @labels[ :label][ :question][ 'en-US']

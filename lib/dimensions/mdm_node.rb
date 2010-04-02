@@ -5,8 +5,8 @@ module Dimensions
       @parent = parent
     end
 
-    attr_accessor :document
-    attr_accessor :parent
+    attr_reader :document
+    attr_reader :parent
 
     def inspect
       "#<#{self.class}:#{object_id} @document=#{@document.inspect}>"

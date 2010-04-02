@@ -1,9 +1,9 @@
 module Dimensions
   class Categories < MDMNode
-    attr_accessor :name
-    attr_accessor :uuid
-    attr_accessor :categories
-    attr_accessor :categoriesref
+    attr_reader :name
+    attr_reader :uuid
+    attr_reader :categories
+    attr_reader :categoriesref
 
     def closure
       result = []
