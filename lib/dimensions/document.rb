@@ -23,16 +23,8 @@ module Dimensions
       @xml.url
     end
 
-    def base_name
-      ''
-    end
-
     def variable_instances
       @variable_instances ||= build_variable_instances
-    end
-
-    def build_variable_instances
-      Document.sum fields.map {|f| f.variable_instances }, []
     end
 
     def self.make_instance_name( full_name, *indexes)

@@ -13,7 +13,6 @@ module Dimensions
 
       it "knows its basic information" do
 	@grq9.name.should == 'GRQ9'
-	@grq9.full_name.should == 'GRQ9'
 	@grq9.should be_a( MDMArray)
       end
 
@@ -35,11 +34,9 @@ module Dimensions
       it "knows its class" do
 	mdm_class = @grq9.mdm_class
 	mdm_class.name.should == "@class"
-	mdm_class.full_name.should == 'GRQ9[..].@class'
 	mdm_class.should have( 1).fields
 	field = mdm_class.fields.first
 	field.name.should == 'Q9'
-	field.full_name.should == 'GRQ9[..].Q9'
       end
 
       it "allows navigation" do

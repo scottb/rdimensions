@@ -14,7 +14,6 @@ module Dimensions
 
 	it "knows its basic information" do
 	  @q2.name.should == 'Q2'
-	  @q2.full_name.should == 'Q2'
 	  @q2.should be_a( Variable)
 	  @q2.should have_case_data
 	  @q2.data_type.should == :category
@@ -51,7 +50,6 @@ module Dimensions
 
 	it "knows its basic information" do
 	  @fhi.name.should == 'FHI'
-	  @fhi.full_name.should == 'FHI'
 	  @fhi.should_not have_case_data
 	  @fhi.data_type.should == :category
 	end

@@ -6,38 +6,66 @@ module Dimensions
       @document = Document.read( P4550054)
     end
 
-    before do
-      @instances = @document.variable_instances
-      @instance_names = @instances.map( &:name)
+    it "can enumerate the variable instances" do
+      @document.should have( 236).variable_instances
     end
 
-    it "finds simple variables" do
-      @instance_names.should include( 'Q1', 'enowdt')
-    end
-
-    it "finds system classes" do
-      @instance_names.should include( 'Respondent.Serial', 'Respondent.Origin', 'DataCollection.Status')
-    end
-
-    it "finds array members" do
-      @instance_names.should include( 'GRQ9[{_01}].Q9', 'GRQ9[{_03}].Q9')
-    end
-
-    def dropjunk( node)
-      node.children.each do |n|
-	if %w(deleted versions properties).include?( n.name)
-	  n.unlink
-	elsif node.name == 'text'
-	  node.content = node.content[0..20]
-	else
-	  dropjunk( n)
-	end
+    context Variable do
+      it "has a single instance" do
+	q2 = @document.fields.find {|v| v.name == 'Q2' }
+	q2.should have( 1).variable_instances
+	q2.variable_instances.first.name.should == 'Q2'
+	q2.variable_instances.first.field.name.should == 'Q2'
       end
     end
 
-    it "finds multi-level array members" do
-      @instance_names.should include( 'LoopQ27ToQ29[{A}].BlockQ27ToQ29.Q27', 'LoopQ27ToQ29[{A}].BlockQ27ToQ29.Q29')
-      @instance_names.should include( 'LoopQ27ToQ29[{D}].BlockQ27ToQ29.Q27', 'LoopQ27ToQ29[{D}].BlockQ27ToQ29.Q29')
+    context MDMClass do
+      it "has an instance per field" do
+	block = @document.fields.find {|v| v.name == 'LoopQ27ToQ29' }.mdm_class.fields.first
+	block.should have( 3).variable_instances
+	block.variable_instances.map( &:name).should include( 'BlockQ27ToQ29.Q28')
+	block.variable_instances.first.field.name.should == 'Q27'
+      end
+    end
+
+    context MDMArray do
+      it "has an instance per index per field" do
+	grq9 = @document.fields.find {|v| v.name == 'GRQ9' }
+	grq9.should have( 5).variable_instances
+	grq9.variable_instances.map( &:name).should include( 'GRQ9[{_02}].Q9')
+	grq9.variable_instances.first.field.name.should == 'Q9'
+      end
+
+      it "handles the blocked case" do
+	lq27 = @document.fields.find {|v| v.name == 'LoopQ27ToQ29' }
+	lq27.should have( 8*3).variable_instances
+	lq27.variable_instances.map( &:name).should include( 'LoopQ27ToQ29[{D}].BlockQ27ToQ29.Q28')
+	lq27.variable_instances.first.field.name.should == 'Q27'
+      end
+    end
+
+    context Document do
+      before do
+	@instances = @document.variable_instances
+	@instance_names = @instances.map( &:name)
+      end
+
+      it "finds simple variables" do
+	@instance_names.should include( 'Q1', 'enowdt')
+      end
+
+      it "finds system classes" do
+	@instance_names.should include( 'Respondent.Serial', 'Respondent.Origin', 'DataCollection.Status')
+      end
+
+      it "finds array members" do
+	@instance_names.should include( 'GRQ9[{_01}].Q9', 'GRQ9[{_03}].Q9')
+      end
+
+      it "finds multi-level array members" do
+	@instance_names.should include( 'LoopQ27ToQ29[{A}].BlockQ27ToQ29.Q27', 'LoopQ27ToQ29[{A}].BlockQ27ToQ29.Q29')
+	@instance_names.should include( 'LoopQ27ToQ29[{D}].BlockQ27ToQ29.Q27', 'LoopQ27ToQ29[{D}].BlockQ27ToQ29.Q29')
+      end
     end
   end
 end

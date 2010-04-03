@@ -1,8 +1,5 @@
 module Dimensions
   module Variable
-    def variable_instances
-      @variable_instances ||= [ VariableInstance.new( self, full_name) ]
-    end
   end
 
   class VariableDefinition < Field
@@ -15,10 +12,6 @@ module Dimensions
   class VariableProxy < MDMNode
     include Variable
     attr_reader :name
-
-    def full_name
-      parent.base_name == '' ? name : "#{parent.base_name}.#{name}"
-    end
 
     def method_missing( method, *args, &block)
       return @delegate.send( method, *args, &block) if @delegate.respond_to?( method)

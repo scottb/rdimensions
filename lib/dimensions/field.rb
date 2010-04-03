@@ -10,5 +10,9 @@ module Dimensions
     def system?
       @system
     end
+
+    def variable_instances
+      @variable_instances ||= build_variable_instances
+    end
   end
 end
