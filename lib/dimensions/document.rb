@@ -11,6 +11,18 @@ module Dimensions
     attr_reader :categories, :category_map, :languages, :data_sources, :contexts
     attr_reader :label_types, :routing_contexts, :fields, :variables
     attr_reader :created_by_version, :last_updated_by_version
+    attr_writer :default_label_context, :default_label_language
+
+    def initialize
+    end
+
+    def default_label_context
+      @default_label_context || :question
+    end
+
+    def default_label_language
+      @default_label_language || 'en-US'
+    end
 
     def document
       self

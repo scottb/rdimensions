@@ -20,6 +20,32 @@ module Dimensions
       @model_node.should have( 1).labels
     end
 
+    context "label access defaults" do
+      after do
+	@doc.default_label_context = nil
+	@doc.default_label_language = nil
+      end
+
+      it "knows its default" do
+	@doc.default_label_context.should == :question
+	@doc.default_label_language.should == 'en-US'
+	@model_node.label.should == 'Completed successfully'
+	@doc.default_label_context = :analysis
+	@model_node.label.should == 'Completed successfully'
+	@doc.default_label_language = 'es-ES'
+	@model_node.label.should == 'Completada exitósamente'
+      end
+
+      it "falls back gracefully on missing entries" do
+	model_node = @doc.variables.find {|v| v.name == 'Q1' }
+	model_node.label.should == 'First, in which of the following states do you currently reside?'
+	@doc.default_label_context = :analysis
+	model_node.label.should == 'First, in which of the following states do you currently reside?'
+	@doc.default_label_language = 'de-DE'
+	model_node.label.should == 'First, in which of the following states do you currently reside?'
+      end
+    end
+
     context "individual labels" do
       before do
 	@label = @model_node.labels[ :label]
