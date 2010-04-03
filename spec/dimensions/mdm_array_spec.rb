@@ -45,7 +45,5 @@ module Dimensions
 	mdm_class.fields.first.parent.should equal( mdm_class)
       end
     end
-
-# 'LoopQ27ToQ29'
   end
 end

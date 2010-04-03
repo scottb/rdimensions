@@ -1,10 +1,15 @@
 module Dimensions
   class VariableInstance
     attr_accessor :name
-    attr_accessor :field
+    attr_reader :sources
 
-    def initialize( name, field)
-      @name, @field = name, field
+    def initialize( name, source)
+      @name, @sources = name, [ source ]
+    end
+
+    def add_source( name, *sources)
+      @name = "#{name}.#{@name}"
+      @sources = sources + @sources
     end
   end
 
@@ -25,7 +30,7 @@ module Dimensions
       mdm_class.fields.map do |field|
 	categories.map do |c|
 	  iname = Document.make_instance_name( "#{name}[..]", c.to_index)
-	  field.build_variable_instances.each {|vi| vi.name = "#{iname}.#{vi.name}" }
+	  field.build_variable_instances.each {|vi| vi.add_source( iname, self, c) }
 	end
       end.flatten
     end
@@ -33,9 +38,7 @@ module Dimensions
 
   class MDMClass
     def build_variable_instances
-      fields.map( &:build_variable_instances).flatten.each do |vi|
-	vi.name = "#{name}.#{vi.name}"
-      end
+      fields.map( &:build_variable_instances).flatten.each {|vi| vi.add_source( name, self) }
     end
   end
 end

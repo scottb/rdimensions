@@ -14,33 +14,41 @@ module Dimensions
       it "has a single instance" do
 	q2 = @document.fields.find {|v| v.name == 'Q2' }
 	q2.should have( 1).variable_instances
-	q2.variable_instances.first.name.should == 'Q2'
-	q2.variable_instances.first.field.name.should == 'Q2'
+	instance = q2.variable_instances.first
+	instance.name.should == 'Q2'
+	instance.should have( 1).sources
+	instance.sources.map( &:name).should == [ 'Q2' ]
       end
     end
 
     context MDMClass do
-      it "has an instance per field" do
+      it "has an instance per variable" do
 	block = @document.fields.find {|v| v.name == 'LoopQ27ToQ29' }.mdm_class.fields.first
 	block.should have( 3).variable_instances
 	block.variable_instances.map( &:name).should include( 'BlockQ27ToQ29.Q28')
-	block.variable_instances.first.field.name.should == 'Q27'
+	instance = block.variable_instances.first
+	instance.should have( 2).sources
+	instance.sources.map( &:name).should == ['BlockQ27ToQ29', 'Q27']
       end
     end
 
     context MDMArray do
-      it "has an instance per index per field" do
+      it "has an instance per index per variable" do
 	grq9 = @document.fields.find {|v| v.name == 'GRQ9' }
 	grq9.should have( 5).variable_instances
 	grq9.variable_instances.map( &:name).should include( 'GRQ9[{_02}].Q9')
-	grq9.variable_instances.first.field.name.should == 'Q9'
+	instance = grq9.variable_instances.first
+	instance.should have( 3).sources
+	instance.sources.map( &:name).should == ['GRQ9', '_01', 'Q9']
       end
 
       it "handles the blocked case" do
 	lq27 = @document.fields.find {|v| v.name == 'LoopQ27ToQ29' }
 	lq27.should have( 8*3).variable_instances
 	lq27.variable_instances.map( &:name).should include( 'LoopQ27ToQ29[{D}].BlockQ27ToQ29.Q28')
-	lq27.variable_instances.first.field.name.should == 'Q27'
+	instance = lq27.variable_instances.first
+	instance.should have( 4).sources
+	instance.sources.map( &:name).should == ['LoopQ27ToQ29', 'A', 'BlockQ27ToQ29', 'Q27']
       end
     end
 
