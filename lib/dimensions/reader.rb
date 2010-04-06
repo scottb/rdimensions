@@ -35,6 +35,8 @@ module Dimensions
 	  # TODO: mappings
 	  @fields = Factory.build_fields_for( self, metadata.at_xpath( 'system'), true) + Factory.build_fields_for( self, metadata.at_xpath( 'design/fields'))
 	  @languages = metadata.xpath( 'languages/language').map {|node| Factory.build_language_for( self, node) }
+	  @languages_base = metadata.at_xpath( 'languages/@base')
+	  @languages_base = @languages_base.value if @languages_base
 	  @contexts = Factory.build_contexts_for( self, metadata.at_xpath( 'contexts'))
 	  @label_types = Factory.build_contexts_for( self, metadata.at_xpath( 'labeltypes'))
 	  @routing_contexts = Factory.build_contexts_for( self, metadata.at_xpath( 'routingcontexts'))

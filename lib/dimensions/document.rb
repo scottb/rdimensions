@@ -21,7 +21,7 @@ module Dimensions
     end
 
     def default_label_language
-      @default_label_language || 'en-US'
+      @default_label_language || @languages_base || 'en-US'
     end
 
     def document

@@ -28,7 +28,7 @@ module Dimensions
 
       it "knows its default" do
 	@doc.default_label_context.should == :question
-	@doc.default_label_language.should == 'en-US'
+	@doc.default_label_language.should == 'EN-US'
 	@model_node.label.should == 'Completed successfully'
 	@doc.default_label_context = :analysis
 	@model_node.label.should == 'Completed successfully'
