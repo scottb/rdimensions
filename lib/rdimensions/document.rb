@@ -1,4 +1,4 @@
-module Dimensions
+module RDimensions
   class Document
     include MDMObject
     include LabeledObject

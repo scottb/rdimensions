@@ -1,4 +1,4 @@
-module Dimensions
+module RDimensions
   module Contexts
     attr_reader :base
     attr_writer :current

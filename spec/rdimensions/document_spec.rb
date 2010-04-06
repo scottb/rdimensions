@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module Dimensions
+module RDimensions
   describe Document do
     it "knows what version of the MDM interface it supports" do
       Document.mdm_version.should == '5.0.3.3066'

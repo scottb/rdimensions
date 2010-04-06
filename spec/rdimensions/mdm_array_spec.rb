@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module Dimensions
+module RDimensions
   describe MDMArray do
     before( :all) do
       @doc = Document.read( P4550054)

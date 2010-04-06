@@ -1,4 +1,4 @@
-module Dimensions
+module RDimensions
   module Label
     include MDMObject
     attr_reader :context

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module Dimensions
+module RDimensions
   describe Variable do
     before do
       @doc = Document.read( P4550054)

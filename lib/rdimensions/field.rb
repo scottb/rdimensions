@@ -1,4 +1,4 @@
-module Dimensions
+module RDimensions
   class Field < MDMNode
     include MDMObject
     include LabeledObject

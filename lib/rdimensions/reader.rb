@@ -5,7 +5,7 @@ class Nokogiri::XML::Element
   end
 end
 
-module Dimensions
+module RDimensions
   class Document
     class << self
       def read( filename)

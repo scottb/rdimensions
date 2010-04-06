@@ -1,4 +1,4 @@
-module Dimensions
+module RDimensions
   class Connection < MDMNode
     attr_reader :name
     attr_reader :dblocation

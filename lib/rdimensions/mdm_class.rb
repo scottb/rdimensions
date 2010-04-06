@@ -1,4 +1,4 @@
-module Dimensions
+module RDimensions
   class MDMClass < Field
     attr_reader :mdm_class
     attr_reader :fields

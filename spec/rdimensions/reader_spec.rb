@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module Dimensions
+module RDimensions
   describe Document do
     it "can be read from a file" do
       doc = Document.read( P4550054)

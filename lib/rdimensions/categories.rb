@@ -1,4 +1,4 @@
-module Dimensions
+module RDimensions
   class Categories < MDMNode
     attr_reader :name
     attr_reader :uuid

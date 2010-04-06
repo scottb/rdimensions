@@ -1,4 +1,4 @@
-module Dimensions
+module RDimensions
   class VariableInstance
     attr_accessor :name
     attr_reader :sources

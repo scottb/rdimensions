@@ -1,4 +1,4 @@
-module Dimensions
+module RDimensions
   module DataSources
     attr_accessor :default
     attr_writer :current

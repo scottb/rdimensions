@@ -1,4 +1,4 @@
-module Dimensions
+module RDimensions
   class MDMElement < MDMNode
     include MDMObject
     include LabeledObject

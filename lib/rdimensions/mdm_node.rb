@@ -1,4 +1,4 @@
-module Dimensions
+module RDimensions
   class MDMNode
     def initialize( parent)
       @document = parent.document

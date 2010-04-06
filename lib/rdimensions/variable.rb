@@ -1,4 +1,4 @@
-module Dimensions
+module RDimensions
   module Variable
   end
 

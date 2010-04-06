@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module Dimensions
+module RDimensions
   describe VariableInstance do
     before( :all) do
       @document = Document.read( P4550054)
