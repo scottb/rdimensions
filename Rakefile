@@ -11,7 +11,7 @@ begin
     gemspec.homepage = 'http://github.com/scottb/rdimensions'
     gemspec.authors = ['Scott Brickner']
   end
-  Jeweler::GemcutterTasks.new
+  #Jeweler::GemcutterTasks.new
 rescue LoadError
   puts 'Jewler not available. Install it with: sudo gem install jeweler'
 end
