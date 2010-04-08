@@ -36,6 +36,11 @@ module RDimensions
 	  cats.map( &:label).should == ['Under 18', '18-24', '25-34', '35-44', '45-54', '55-64', '65 or older']
 	end
 
+	it "knows its min and max counts" do
+	  @q2.min_value.should == 1
+	  @q2.max_value.should == 1
+	end
+
 	it "should allow navigation the categories" do
 	  cats = @q2.categories
 	  cats.parent.should equal( @q2)

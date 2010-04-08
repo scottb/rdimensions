@@ -67,6 +67,8 @@ module RDimensions
 	  @system = system
 	  @uuid = node[ 'id']
 	  @name = node[ 'name']
+	  @min_value = node[ 'min'].to_i if node.has_attribute? 'min'
+	  @max_value = node[ 'max'].to_i if node.has_attribute? 'max'
 	  @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
 	  @data_type = Document.get_type( node[ 'type'].to_i)
 	  @labels = Factory.build_labels_for( node)
@@ -78,7 +80,6 @@ module RDimensions
 
     def self.build_array_for( parent, node, system = false)
       MDMArray.build( parent, node) do |node|
-@node = node
 	@system = system
 	@uuid = node[ 'ref']
 	@name = node[ 'name']

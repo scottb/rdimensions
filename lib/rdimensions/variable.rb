@@ -4,6 +4,8 @@ module RDimensions
 
   class VariableDefinition < Field
     include Variable
+    attr_reader :min_value, :max_value
+
     def has_case_data?
       @has_case_data
     end
