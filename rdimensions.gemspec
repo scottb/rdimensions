@@ -5,20 +5,21 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rdimensions}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Scott Brickner"]
-  s.date = %q{2010-04-06}
+  s.date = %q{2010-04-09}
   s.description = %q{Rudimentary access to Dimensions Metadata}
   s.email = %q{scottb@brickner.net}
   s.extra_rdoc_files = [
     "README"
   ]
   s.files = [
-    "README",
+    ".gitignore",
+     "README",
+     "Rakefile",
      "VERSION",
-     "hack.rb",
      "lib/rdimensions.rb",
      "lib/rdimensions/categories.rb",
      "lib/rdimensions/connection.rb",
@@ -39,6 +40,7 @@ Gem::Specification.new do |s|
      "lib/rdimensions/reader.rb",
      "lib/rdimensions/variable.rb",
      "lib/rdimensions/variable_instance.rb",
+     "rdimensions.gemspec",
      "spec/fixtures/P4550054.mdd",
      "spec/rdimensions/document_spec.rb",
      "spec/rdimensions/labeled_object_spec.rb",
@@ -53,7 +55,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}
-  s.summary = %q{Rudimentary access to Dimensions Metadata}
+  s.summary = %q{Dimensions Metadata}
   s.test_files = [
     "spec/spec_helper.rb",
      "spec/rdimensions/reader_spec.rb",
@@ -61,7 +63,8 @@ Gem::Specification.new do |s|
      "spec/rdimensions/variable_instance_spec.rb",
      "spec/rdimensions/mdm_array_spec.rb",
      "spec/rdimensions/labeled_object_spec.rb",
-     "spec/rdimensions/document_spec.rb"
+     "spec/rdimensions/document_spec.rb",
+     "spec/fixtures/P4550054.mdd"
   ]
 
   if s.respond_to? :specification_version then
