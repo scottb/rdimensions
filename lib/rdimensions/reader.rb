@@ -10,9 +10,13 @@ module RDimensions
     class << self
       def read( filename)
 	f = open( filename)
-	result = Factory.build( f)
+	result = Factory.build( Nokogiri::XML( f))
 	f.close
 	result
+      end
+
+      def parse( mdd_string)
+	Factory.build( Nokogiri::XML( mdd_string))
       end
     end
   end
@@ -23,7 +27,7 @@ module RDimensions
       def build( source)
 	result = Document.new
 	result.instance_exec do
-	  @xml = Nokogiri::XML( source)
+	  @xml = source
 	  metadata = @xml.root.children.first
 
 	  @data_sources = Factory.build_connections_for( self, metadata.at_xpath( 'datasources'))
