@@ -28,15 +28,17 @@ module RDimensions
 	result = Document.new
 	result.instance_exec do
 	  @xml = source
-	  metadata = @xml.root.children.first
+	  metadata = @xml.root.at_xpath( '*[local-name() = "metadata"]')
 
 	  @data_sources = Factory.build_connections_for( self, metadata.at_xpath( 'datasources'))
 	  @variables = metadata.xpath( 'definition/variable').map {|node| Factory.build_variable_for( self, node) }
 	  @categories = Factory.build_categories_for( self, metadata.at_xpath( 'definition'))
+
 	  # TODO: definition/page
 	  # TODO: system
 	  # TODO: systemrouting
 	  # TODO: mappings
+
 	  @fields = Factory.build_fields_for( self, metadata.at_xpath( 'system'), true) + Factory.build_fields_for( self, metadata.at_xpath( 'design/fields'))
 	  @languages = metadata.xpath( 'languages/language').map {|node| Factory.build_language_for( self, node) }
 	  @languages_base = metadata.at_xpath( 'languages/@base')
@@ -44,12 +46,18 @@ module RDimensions
 	  @contexts = Factory.build_contexts_for( self, metadata.at_xpath( 'contexts'))
 	  @label_types = Factory.build_contexts_for( self, metadata.at_xpath( 'labeltypes'))
 	  @routing_contexts = Factory.build_contexts_for( self, metadata.at_xpath( 'routingcontexts'))
+
 	  # TODO: scripttypes
 	  # TODO: versions
 	  # TODO: savelogs
 	  # TODO: atoms
-	  @created_by_version = metadata.at_xpath( 'versionlist/version[1]/@mdmversion').value
-	  @last_updated_by_version = metadata.at_xpath( 'versionlist/version[last()]/@mdmversion').value
+
+	  node = metadata.at_xpath( 'versionlist/version[1]/@mdmversion')
+	  @created_by_version = node.value if node
+
+	  node = metadata.at_xpath( 'versionlist/version[last()]/@mdmversion')
+	  @last_updated_by_version = node.value if node
+
 	  @category_map = Hash[ metadata.xpath( 'categorymap/categoryid').map {|node| [ node[ 'name'], node[ 'value'].to_i ] }]
 
 	  @labels = Factory.build_labels_for( metadata)
