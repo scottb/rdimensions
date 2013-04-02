@@ -9,7 +9,7 @@ module RDimensions
 
     attr_reader :xml
     attr_reader :categories, :category_map, :languages, :data_sources, :contexts
-    attr_reader :label_types, :routing_contexts, :fields, :variables
+    attr_reader :label_types, :routing_contexts, :fields, :variables, :othervariables
     attr_reader :created_by_version, :last_updated_by_version
     attr_writer :default_label_context, :default_label_language
 

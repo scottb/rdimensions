@@ -1,4 +1,8 @@
 module RDimensions
+  class Category < MDMElement
+    attr_reader :othervariables
+  end
+
   class Categories < MDMNode
     attr_reader :name
     attr_reader :uuid

@@ -21,7 +21,13 @@ module RDimensions
 
   module Variable
     def build_variable_instances
-      [ VariableInstance.new( name, self) ]
+      [ VariableInstance.new( name, self) ] + if categories then Document.sum( categories.map {|c| c.build_variable_instances( name) }, []) else [] end
+    end
+  end
+
+  class Category
+    def build_variable_instances( parent_name)
+      othervariables.map {|v| VariableInstance.new( "#{parent_name}.#{v.name}", v) }
     end
   end
 

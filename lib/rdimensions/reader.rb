@@ -31,6 +31,7 @@ module RDimensions
 	  metadata = @xml.root.at_xpath( '*[local-name() = "metadata"]')
 
 	  @data_sources = Factory.build_connections_for( self, metadata.at_xpath( 'datasources'))
+	  @othervariables = metadata.xpath( 'definition/othervariable').map {|node| Factory.build_variable_for( self, node) }
 	  @variables = metadata.xpath( 'definition/variable').map {|node| Factory.build_variable_for( self, node) }
 	  @categories = Factory.build_categories_for( self, metadata.at_xpath( 'definition'))
 
@@ -90,6 +91,20 @@ module RDimensions
       end
     end
 
+    def self.build_othervariables_for( parent, node)
+      node.xpath( 'othervariable').map do |onode|
+	if onode.has_attribute?( 'ref')
+	  VariableProxy.build( node, onode) do
+	    @name = onode[ 'name']
+	    @delegate = parent.document.othervariables.find {|v| v.uuid == onode[ 'ref'] }
+	    raise "Delegate not found for #{onode[ 'ref']} at #{onode.path}" unless @delegate
+	  end
+	else
+	  raise "Expected delegate, not definition at #{node.path}"
+	end
+      end
+    end
+
     def self.build_array_for( parent, node, system = false)
       MDMArray.build( parent, node) do |node|
 	@system = system
@@ -136,9 +151,10 @@ module RDimensions
 	    @uuid = node[ 'id']
 	    @categories = Factory.build_categories_for( self, cnode).first
 	    @elements = node.xpath( 'category').map do |n|
-	      MDMElement.build( parent, n) do |node|
+	      Category.build( self, n) do |node|
 		@name = node[ 'name']
 		@labels = Factory.build_labels_for( node)
+		@othervariables = Factory.build_othervariables_for( self, node)
 	      end
 	    end
 	  end

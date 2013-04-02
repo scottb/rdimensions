@@ -13,9 +13,8 @@ begin
     gemspec.add_dependency( 'nokogiri', '>= 1.4')
     gemspec.required_ruby_version = '> 1.8.1'
   end
-  #Jeweler::GemcutterTasks.new
 rescue LoadError
   puts 'Jewler not available. Install it with: sudo gem install jeweler'
 end
 
-Dir["#{File.dirname(__FILE__)}/tasks/*.rake"].sort.each {|ext| load ext }
+#Dir["#{File.dirname(__FILE__)}/tasks/*.rake"].sort.each {|ext| load ext }

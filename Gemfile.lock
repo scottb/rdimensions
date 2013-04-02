@@ -1,0 +1,16 @@
+PATH
+  remote: .
+  specs:
+    rdimensions (0.0.4)
+      nokogiri (>= 1.4)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    nokogiri (1.5.9)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rdimensions!
