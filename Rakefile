@@ -11,6 +11,7 @@ begin
     gemspec.homepage = 'http://github.com/scottb/rdimensions'
     gemspec.authors = ['Scott Brickner']
     gemspec.add_dependency( 'nokogiri', '>= 1.4')
+    gemspec.add_development_dependency( 'rspec')
     gemspec.required_ruby_version = '> 1.8.1'
   end
 rescue LoadError
