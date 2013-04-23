@@ -11,6 +11,10 @@ module RDimensions
       @system
     end
 
+    def closed_categories
+      Document.sum( @categories.map( &:closure), [])
+    end
+
     def variable_instances
       @variable_instances ||= build_variable_instances
     end

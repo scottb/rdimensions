@@ -21,7 +21,11 @@ module RDimensions
 
   module Variable
     def build_variable_instances
-      [ VariableInstance.new( name, self) ] + if categories then Document.sum( categories.map {|c| c.build_variable_instances( name) }, []) else [] end
+      result = [ VariableInstance.new( name, self) ]
+      categories.each do |cat|
+	result += Document.sum( cat.map {|c| c.build_variable_instances( name) }, [])
+      end
+      result
     end
   end
 
@@ -34,9 +38,11 @@ module RDimensions
   class MDMArray
     def build_variable_instances
       mdm_class.fields.map do |field|
-	categories.map do |c|
-	  iname = Document.make_instance_name( "#{name}[..]", c.to_index)
-	  field.build_variable_instances.each {|vi| vi.add_source( iname, self, c) }
+	categories.map do |cat|
+	  cat.map do |c|
+	    iname = Document.make_instance_name( "#{name}[..]", c.to_index)
+	    field.build_variable_instances.each {|vi| vi.add_source( iname, self, c) }
+	  end
 	end
       end.flatten
     end

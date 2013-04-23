@@ -10,10 +10,7 @@ module RDimensions
     attr_reader :categoriesref
 
     def closure
-      result = []
-      result.concat( self)
-      result.concat( @categories.closure) if @categories
-      result
+      @elements + Document.sum( @categories.map( &:closure), [])
     end
 
     def respond_to?( method)

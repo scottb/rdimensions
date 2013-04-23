@@ -88,7 +88,7 @@ module RDimensions
 	end
       end
 
-      def sum( collection, identity = 0, &block)
+      def sum( collection, identity = 0)
 	return identity unless collection.size > 0
 	collection.inject( identity) {|sum, element| sum + element }
       end

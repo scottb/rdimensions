@@ -85,7 +85,7 @@ module RDimensions
 	  @has_case_data = !( node.has_attribute?( 'no-casedata') && node[ 'no-casedata'] == '-1')
 	  @data_type = Document.get_type( node[ 'type'].to_i)
 	  @labels = Factory.build_labels_for( node)
-	  @categories = Factory.build_categories_for( self, node).first
+	  @categories = Factory.build_categories_for( self, node)
 	  @mdm_class = Factory.build_class_for( self, node.at_xpath( 'class'))
 	end
       end
@@ -111,7 +111,7 @@ module RDimensions
 	@uuid = node[ 'ref']
 	@name = node[ 'name']
 	@labels = Factory.build_labels_for( node)
-	@categories = Factory.build_categories_for( self, node).first
+	@categories = Factory.build_categories_for( self, node)
 	@mdm_class = Factory.build_class_for( self, node.at_xpath( 'class'), system)
       end
     end
@@ -149,7 +149,7 @@ module RDimensions
 	  Categories.build( parent, cnode) do |node|
 	    @name = node[ 'name']
 	    @uuid = node[ 'id']
-	    @categories = Factory.build_categories_for( self, cnode).first
+	    @categories = Factory.build_categories_for( self, cnode)
 	    @elements = node.xpath( 'category').map do |n|
 	      Category.build( self, n) do |node|
 		@name = node[ 'name']
