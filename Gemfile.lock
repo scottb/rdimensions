@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rdimensions (0.0.5)
+    rdimensions (0.0.6)
       jeweler
       nokogiri (>= 1.4)
       rdimensions
