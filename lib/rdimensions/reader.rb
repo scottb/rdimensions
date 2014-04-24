@@ -205,7 +205,7 @@ module RDimensions
       node.xpath( 'text').each do |node|
 	context = node[ 'context'].downcase.to_sym
 	result[ context] ||= {}
-	result[ context][ node[ 'lang']] = node.content
+	result[ context][ node[ 'xml:lang']] = node.content
       end
       result
     end

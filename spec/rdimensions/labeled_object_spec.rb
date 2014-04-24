@@ -17,7 +17,7 @@ module RDimensions
     end
 
     it "has an entry for each context" do
-      @model_node.should have( 1).labels
+      @model_node.should have( 9).labels
     end
 
     context "label access defaults" do
@@ -29,11 +29,11 @@ module RDimensions
       it "knows its default" do
 	@doc.default_label_context.should == :question
 	@doc.default_label_language.should == 'EN-US'
-	@model_node.label.should == 'Completed successfully'
+	@model_node.first.label.should == 'Completed successfully'
 	@doc.default_label_context = :analysis
-	@model_node.label.should == 'Completed successfully'
+	@model_node.first.label.should == 'Completed successfully'
 	@doc.default_label_language = 'es-ES'
-	@model_node.label.should == 'Completada exitósamente'
+	@model_node.first.label.should == 'Completada exitósamente'
       end
 
       it "falls back gracefully on missing entries" do
@@ -48,7 +48,7 @@ module RDimensions
 
     context "individual labels" do
       before do
-	@label = @model_node.labels[ :label]
+	@label = @model_node.first.labels[ :label]
       end
 
       it "knows its context" do

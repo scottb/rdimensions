@@ -27,8 +27,8 @@ module RDimensions
       end
 
       it "knows its indexes" do
-	@grq9.categories.map( &:name).should == ["_01", "_02", "_03", "_04", "_05"]
-	@grq9.categories.map( &:label).should == ["Packaged, pre-sliced bread, buns and rolls", "Sausage", "Hot dogs", "Lunch meat", "Frozen cakes, pies or other desserts"]
+	@grq9.categories.first.map( &:name).should == ["_01", "_02", "_03", "_04", "_05"]
+	@grq9.categories.first.map( &:label).should == ["Packaged, pre-sliced bread, buns and rolls", "Sausage", "Hot dogs", "Lunch meat", "Frozen cakes, pies or other desserts"]
       end
 
       it "knows its class" do

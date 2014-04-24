@@ -4,18 +4,18 @@ module RDimensions
 
     def label
       if @labels && @labels.has_key?( :label)
-	label = @labels[ :label]
+	lbl = @labels[ :label]
 	context = document.default_label_context
-	if label.has_key? context
-	  label = label[ context]
+	if lbl.has_key? context
+	  lbl = lbl[ context]
 	else
-	  label = label[ :question]
+	  lbl = lbl[ :question]
 	end
 	language = document.default_label_language
-	if label.has_key? language
-	  label[ language]
+	if lbl.has_key? language
+	  lbl[ language]
 	else
-	  label[ 'en-US']
+	  lbl[ 'en-US']
 	end
       end
     end
