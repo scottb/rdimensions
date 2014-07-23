@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["Scott Brickner"]
-  s.date = "2014-04-24"
+  s.date = "2014-07-23"
   s.description = "Rudimentary access to Dimensions Metadata"
   s.email = "scottb@brickner.net"
   s.extra_rdoc_files = [
@@ -68,20 +68,17 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<rdimensions>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_runtime_dependency(%q<nokogiri>, [">= 1.4"])
-      s.add_development_dependency(%q<rspec>, [">= 0"])
     else
       s.add_dependency(%q<jeweler>, [">= 0"])
       s.add_dependency(%q<rdimensions>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<nokogiri>, [">= 1.4"])
-      s.add_dependency(%q<rspec>, [">= 0"])
     end
   else
     s.add_dependency(%q<jeweler>, [">= 0"])
     s.add_dependency(%q<rdimensions>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<nokogiri>, [">= 1.4"])
-    s.add_dependency(%q<rspec>, [">= 0"])
   end
 end
 
