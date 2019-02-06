@@ -179,7 +179,8 @@ module RDimensions
     end
 
     def self.build_connections_for( parent, node)
-      default = node.at_xpath( '@default').value
+      default = node.at_xpath( '@default')
+      default = default.value if default
       result = node.xpath( 'connection').map do |cnode|
 	Connection.build( parent, cnode) do |node|
 	  @name = node[ 'name']
