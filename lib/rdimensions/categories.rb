@@ -13,8 +13,8 @@ module RDimensions
       @elements + Document.sum( @categories.map( &:closure), [])
     end
 
-    def respond_to?( method)
-      @elements.respond_to?( method) || super
+    def respond_to?( method, include_all = false)
+      @elements.respond_to?( method, include_all) || super
     end
 
     def method_missing( method, *args, &block)
@@ -28,8 +28,8 @@ module RDimensions
       @delegate ||= @document.categories.find {|c| c.uuid == @categoriesref }
     end
 
-    def respond_to?( method)
-      delegate.respond_to?( method) || super
+    def respond_to?( method, include_all = false)
+      delegate.respond_to?( method, include_all) || super
     end
 
     def method_missing( method, *args, &block)

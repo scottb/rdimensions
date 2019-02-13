@@ -20,8 +20,8 @@ module RDimensions
       super
     end
 
-    def respond_to?( method)
-      @delegate.respond_to?( method) || super
+    def respond_to?( method, include_all = false)
+      @delegate.respond_to?( method, include_all) || super
     end
 
     def inspect
