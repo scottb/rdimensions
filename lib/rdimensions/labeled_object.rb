@@ -11,6 +11,7 @@ module RDimensions
 	else
 	  lbl = lbl[ :question]
 	end
+        lbl ||= {}
 	language = document.default_label_language
 	if lbl.has_key? language
 	  lbl[ language]
