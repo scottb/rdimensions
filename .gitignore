@@ -4,3 +4,6 @@ pkg
 Notes
 Gemfile
 Gemfile.lock
+.tool-versions
+spec/examples.txt
+rdimensions-*.gem

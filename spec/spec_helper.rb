@@ -5,3 +5,7 @@ require 'rdimensions'
 RSpec::Matchers.define :have_case_data do
   match {|field| field.has_case_data? }
 end
+
+RSpec.configure do |config|
+  config.example_status_persistence_file_path = "spec/examples.txt"
+end

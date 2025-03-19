@@ -1,93 +1,80 @@
-require 'spec_helper'
+require "spec_helper"
 
-module RDimensions
-  describe Variable do
-    before do
-      @doc = Document.read( P4550054)
+describe RDimensions::Variable do
+  let(:doc) { RDimensions::Document.read( P4550054) }
+
+  context "definition" do
+    context "with case data" do
+      let(:q2) { doc.variables.find {|f| f.name == "Q2" } }
+
+      it "knows its basic information" do
+        expect(q2.name).to eq "Q2"
+        expect(q2).to be_a(RDimensions::Variable)
+        expect(q2).to have_case_data
+        expect(q2.data_type).to eq :category
+      end
+
+      it "knows its place in the document" do
+        expect(q2.document).to eq(doc)
+        expect(q2.parent).to eq(doc)
+      end
+
+      it "knows its labels" do
+        expect(q2.labels.dig(:label, :question, "en-US")).to eq "In which of the following categories is your age?"
+      end
+
+      it "knows its categories" do
+        expect(q2.closed_categories.size).to eq 7
+        cats = q2.closed_categories
+        expect(cats.map(&:name)).to eq ["_01", "_02", "_03", "_04", "_05", "_06", "_07"]
+        expect(cats.map(&:label)).to eq ["Under 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65 or older"]
+      end
+
+      it "knows its min and max counts" do
+        expect(q2.min_value).to eq 1
+        expect(q2.max_value).to eq 1
+      end
+
+      it "should allow navigation the categories" do
+        cats = q2.categories
+        # expect(cats.parent).to eq q2
+        expect(cats.first.parent).to eq q2
+      end
     end
 
-    context "definition" do
-      context "with case data" do
-	before do
-	  @q2 = @doc.variables.find {|f| f.name == 'Q2' }
-	end
+    context "without case data" do
+      let(:fhi) { doc.fields.find {|f| f.name == "FHI" } }
 
-	it "knows its basic information" do
-	  @q2.name.should == 'Q2'
-	  @q2.should be_a( Variable)
-	  @q2.should have_case_data
-	  @q2.data_type.should == :category
-	end
+      it "knows its basic information" do
+        expect(fhi.name).to eq "FHI"
+        expect(fhi).not_to have_case_data
+        expect(fhi.data_type).to eq :category
+      end
+    end
 
-	it "knows its place in the document" do
-	  @q2.document.should equal( @doc)
-	  @q2.parent.should_not be_nil
-	  @q2.parent.should equal( @doc)
-	end
+    context "nested categories" do
+      let(:q1) { doc.fields.find {|f| f.name == "Q1" } }
 
-	it "knows its labels" do
-	  @q2.labels[ :label][ :question][ 'en-US'].should == 'In which of the following categories is your age?'
-	end
-
-	it "knows its categories" do
-	  @q2.should have( 7).closed_categories
-	  cats = @q2.closed_categories
-	  cats.map( &:name).should == ['_01', '_02', '_03', '_04', '_05', '_06', '_07']
-	  cats.map( &:label).should == ['Under 18', '18-24', '25-34', '35-44', '45-54', '55-64', '65 or older']
-	end
-
-	it "knows its min and max counts" do
-	  @q2.min_value.should == 1
-	  @q2.max_value.should == 1
-	end
-
-	it "should allow navigation the categories" do
-	  cats = @q2.categories
-	  # cats.parent.should equal( @q2)
-	  cats.first.parent.should equal( @q2)
-	end
+      it "should know its categories" do
+        pending "fixing the spec"
+        cats = q1.categories.categories
+        expect(cats.map(&:label)).to include("Alabama", "Virginia")
+        expect(cats.size).to eq 53
       end
 
-      context "without case data" do
-	before do
-	  @fhi = @doc.fields.find {|f| f.name == 'FHI' }
-	end
-
-	it "knows its basic information" do
-	  @fhi.name.should == 'FHI'
-	  @fhi.should_not have_case_data
-	  @fhi.data_type.should == :category
-	end
+      it "should compute the closure" do
+        pending "fixing the spec"
+        cats = q1.categories.closure
+        expect(cats.size).to eq 53
+        expect(cats.map(&:label)).to include("Alabama", "Virginia")
       end
+    end
 
-=begin
-      context "nested categories" do
-	before do
-	  @q1 = @doc.fields.find {|f| f.name == 'Q1' }
-	end
+    context "system variables" do
+      let(:respondent) { doc.fields.find {|f| f.name == "Respondent" } }
 
-	it "should know its categories" do
-	  cats = @q1.categories.categories
-	  cats.map( &:label).should include( 'Alabama', 'Virginia')
-	  cats.should have( 53).entries
-	end
-
-	it "should compute the closure" do
-	  cats = @q1.categories.closure
-	  cats.should have( 53).entries
-	  cats.map( &:label).should include( 'Alabama', 'Virginia')
-	end
-      end
-=end
-
-      context "system variables" do
-	before do
-	  @respondent = @doc.fields.find {|f| f.name == 'Respondent' }
-	end
-
-	it "knows it's a system variable" do
-	  @respondent.should be_a_system
-	end
+      it "knows it's a system variable" do
+        expect(respondent).to be_a_system
       end
     end
   end
