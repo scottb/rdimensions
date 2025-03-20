@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
-describe RDimensions::LabeledObject do
+RSpec.describe RDimensions::LabeledObject do
   let(:doc) { RDimensions::Document.read(file_fixture("P4550054.mdd")) }
   let(:model_node) { doc.variables.find {|v| v.name == "Status" }.categories.first }
 
@@ -14,7 +16,7 @@ describe RDimensions::LabeledObject do
     expect(model_node.size).to eq 9
   end
 
-  context "label access defaults" do
+  describe "label access defaults" do
     after do
       doc.default_label_context = nil
       doc.default_label_language = nil
@@ -40,8 +42,8 @@ describe RDimensions::LabeledObject do
     end
   end
 
-  context "individual labels" do
-    let(:label) { model_node.first.labels[ :label] }
+  describe "individual labels" do
+    let(:label) { model_node.first.labels[:label] }
 
     it "knows its context" do
       expect(label.context).to eq "LABEL"
@@ -55,7 +57,7 @@ describe RDimensions::LabeledObject do
       expect(label[:question].size).to eq 20
       expect(label[:question]).to include(
         "en-US" => "Completed successfully",
-        "de-DE" => "Erfolgreich abgeschlossen",
+        "de-DE" => "Erfolgreich abgeschlossen"
       )
     end
   end

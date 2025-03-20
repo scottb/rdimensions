@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
-describe RDimensions::Document do
+RSpec.describe RDimensions::Document do
   it "knows what version of the MDM interface it supports" do
     expect(described_class.mdm_version).to eq "5.0.3.3066"
   end
 
   it "can construct instance names from full names and indexes" do
-    expect(described_class.make_instance_name( "GRQ9[..].Q9", "{_01}")).to eq "GRQ9[{_01}].Q9"
-    expect(described_class.make_instance_name( "GRQ9", "{_01}")).to eq "GRQ9"
-    expect(described_class.make_instance_name( "MyLoop[..].MyGrid[..].pref", "2", "{A}")).to eq "MyLoop[2].MyGrid[{A}].pref"
-    expect(described_class.make_instance_name( "MyLoop[..].MyGrid[..].pref", "2")).to eq "MyLoop[2].MyGrid[..].pref"
-    expect(described_class.make_instance_name( "MyLoop[..].MyGrid[..].pref")).to eq "MyLoop[..].MyGrid[..].pref"
+    expect(described_class.make_instance_name("GRQ9[..].Q9", "{_01}")).to eq "GRQ9[{_01}].Q9"
+    expect(described_class.make_instance_name("GRQ9", "{_01}")).to eq "GRQ9"
+    expect(described_class.make_instance_name("MyLoop[..].MyGrid[..].pref", "2", "{A}")).to eq "MyLoop[2].MyGrid[{A}].pref"
+    expect(described_class.make_instance_name("MyLoop[..].MyGrid[..].pref", "2")).to eq "MyLoop[2].MyGrid[..].pref"
+    expect(described_class.make_instance_name("MyLoop[..].MyGrid[..].pref")).to eq "MyLoop[..].MyGrid[..].pref"
   end
 
   context "with a valid MDD file" do
@@ -26,7 +28,7 @@ describe RDimensions::Document do
 
     it "has the category map" do
       expect(doc.category_map.keys).to include("_01", "_02", "lst_qstate._44")
-      expect(doc.category_map[ "_01"]).to eq 79
+      expect(doc.category_map["_01"]).to eq 79
       expect(doc.category_map.size).to eq 228
     end
 
@@ -59,7 +61,7 @@ describe RDimensions::Document do
     end
 
     it "knows the user contexts" do
-      expect(doc.contexts.map( &:name)).to eq ["ANALYSIS", "QUESTION", "QC", "MRSTUDIO", "CARDCOL" ]
+      expect(doc.contexts.map(&:name)).to eq %w[ANALYSIS QUESTION QC MRSTUDIO CARDCOL]
     end
 
     it "knows the base user context" do
@@ -87,7 +89,7 @@ describe RDimensions::Document do
       expect(doc.data_sources.current).to eq "mrRdbDsc2"
       ds = doc.data_sources.first
       expect(ds.name).to eq "mrRdbDsc2"
-      expect(ds.dblocation).to match /^Provider=SQLOLEDB\.1;/
+      expect(ds.dblocation).to match(%r{^Provider=SQLOLEDB\.1;})
       expect(ds.cdscname).to eq "mrRdbDsc2"
       expect(ds.project).to eq "P4550054"
     end

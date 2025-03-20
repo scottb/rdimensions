@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
-describe RDimensions::VariableInstance do
+RSpec.describe RDimensions::VariableInstance do
   let(:document) { RDimensions::Document.read(file_fixture("P4550054.mdd")) }
 
   it "can enumerate the variable instances" do
     expect(document.variable_instances.size).to eq 236
   end
 
-  context "Variable" do
+  describe "Variable" do
     it "has a single instance" do
       q2 = document.fields.find {|v| v.name == "Q2" }
       expect(q2.variable_instances.size).to eq 1
@@ -18,38 +20,38 @@ describe RDimensions::VariableInstance do
     end
   end
 
-  context "MDMClass" do
+  describe "MDMClass" do
     it "has an instance per variable" do
       block = document.fields.find {|v| v.name == "LoopQ27ToQ29" }.mdm_class.fields.first
       expect(block.variable_instances.size).to eq 3
       expect(block.variable_instances.map(&:name)).to include("BlockQ27ToQ29.Q28")
       instance = block.variable_instances.first
       expect(instance.sources.size).to eq 2
-      expect(instance.sources.map(&:name)).to eq ["BlockQ27ToQ29", "Q27"]
+      expect(instance.sources.map(&:name)).to eq %w[BlockQ27ToQ29 Q27]
     end
   end
 
-  context "MDMArray" do
+  describe "MDMArray" do
     it "has an instance per index per variable" do
       grq9 = document.fields.find {|v| v.name == "GRQ9" }
       expect(grq9.variable_instances.size).to eq 5
       expect(grq9.variable_instances.map(&:name)).to include("GRQ9[{_02}].Q9")
       instance = grq9.variable_instances.first
       expect(instance.sources.size).to eq 3
-      expect(instance.sources.map(&:name)).to eq ["GRQ9", "_01", "Q9"]
+      expect(instance.sources.map(&:name)).to eq %w[GRQ9 _01 Q9]
     end
 
     it "handles the blocked case" do
       lq27 = document.fields.find {|v| v.name == "LoopQ27ToQ29" }
-      expect(lq27.variable_instances.size).to eq 8*3
+      expect(lq27.variable_instances.size).to eq 8 * 3
       expect(lq27.variable_instances.map(&:name)).to include("LoopQ27ToQ29[{D}].BlockQ27ToQ29.Q28")
       instance = lq27.variable_instances.first
       expect(instance.sources.size).to eq 4
-      expect(instance.sources.map(&:name)).to eq ["LoopQ27ToQ29", "A", "BlockQ27ToQ29", "Q27"]
+      expect(instance.sources.map(&:name)).to eq %w[LoopQ27ToQ29 A BlockQ27ToQ29 Q27]
     end
   end
 
-  context "Document" do
+  describe "Document" do
     let(:instances) { document.variable_instances }
     let(:instance_names) { instances.map(&:name) }
 

@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
-describe RDimensions::Variable do
+RSpec.describe RDimensions::Variable do
   let(:doc) { RDimensions::Document.read(file_fixture("P4550054.mdd")) }
 
-  context "definition" do
+  describe "definition" do
     context "with case data" do
       let(:q2) { doc.variables.find {|f| f.name == "Q2" } }
 
       it "knows its basic information" do
         expect(q2.name).to eq "Q2"
-        expect(q2).to be_a(RDimensions::Variable)
+        expect(q2).to be_a(described_class)
         expect(q2).to have_case_data
         expect(q2.data_type).to eq :category
       end
@@ -26,7 +28,7 @@ describe RDimensions::Variable do
       it "knows its categories" do
         expect(q2.closed_categories.size).to eq 7
         cats = q2.closed_categories
-        expect(cats.map(&:name)).to eq ["_01", "_02", "_03", "_04", "_05", "_06", "_07"]
+        expect(cats.map(&:name)).to eq %w[_01 _02 _03 _04 _05 _06 _07]
         expect(cats.map(&:label)).to eq ["Under 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65 or older"]
       end
 
@@ -35,7 +37,7 @@ describe RDimensions::Variable do
         expect(q2.max_value).to eq 1
       end
 
-      it "should allow navigation the categories" do
+      it "allows navigation the categories" do
         cats = q2.categories
         # expect(cats.parent).to eq q2
         expect(cats.first.parent).to eq q2
@@ -52,17 +54,17 @@ describe RDimensions::Variable do
       end
     end
 
-    context "nested categories" do
+    describe "nested categories" do
       let(:q1) { doc.fields.find {|f| f.name == "Q1" } }
 
-      it "should know its categories" do
+      it "knows its categories" do
         pending "fixing the spec"
         cats = q1.categories.categories
         expect(cats.map(&:label)).to include("Alabama", "Virginia")
         expect(cats.size).to eq 53
       end
 
-      it "should compute the closure" do
+      it "computes the closure" do
         pending "fixing the spec"
         cats = q1.categories.closure
         expect(cats.size).to eq 53
@@ -70,7 +72,7 @@ describe RDimensions::Variable do
       end
     end
 
-    context "system variables" do
+    describe "system variables" do
       let(:respondent) { doc.fields.find {|f| f.name == "Respondent" } }
 
       it "knows it's a system variable" do

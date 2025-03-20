@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
-describe RDimensions::MDMArray do
+RSpec.describe RDimensions::MDMArray do
   let(:doc) { RDimensions::Document.read(file_fixture("P4550054.mdd")) }
 
-  context "simple loops" do
+  describe "simple loops" do
     let(:grq9) { doc.fields.find {|f| f.name == "GRQ9" } }
 
     it "knows its basic information" do
@@ -21,8 +23,8 @@ describe RDimensions::MDMArray do
     end
 
     it "knows its indexes" do
-      expect(grq9.categories.first.map( &:name)).to eq ["_01", "_02", "_03", "_04", "_05"]
-      expect(grq9.categories.first.map( &:label)).to eq ["Packaged, pre-sliced bread, buns and rolls", "Sausage", "Hot dogs", "Lunch meat", "Frozen cakes, pies or other desserts"]
+      expect(grq9.categories.first.map(&:name)).to eq %w[_01 _02 _03 _04 _05]
+      expect(grq9.categories.first.map(&:label)).to eq ["Packaged, pre-sliced bread, buns and rolls", "Sausage", "Hot dogs", "Lunch meat", "Frozen cakes, pies or other desserts"]
     end
 
     it "knows its class" do

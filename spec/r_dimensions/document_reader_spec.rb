@@ -1,6 +1,8 @@
-require 'spec_helper'
+# frozen_string_literal: true
 
-describe RDimensions::Document do
+require "spec_helper"
+
+RSpec.describe RDimensions::Document do
   let(:mdd) { file_fixture("P4550054.mdd") }
 
   it "can be read from a file" do
