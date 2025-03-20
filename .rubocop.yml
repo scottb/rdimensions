@@ -3,7 +3,6 @@ plugins:
   - rubocop-performance
 
 AllCops:
-  TargetRailsVersion: 7.0
   NewCops: enable
 
 Layout/BeginEndAlignment:
@@ -38,21 +37,6 @@ Naming/MethodParameterName:
 
 Performance/StringInclude:
   Enabled: false
-
-Rails/HelperInstanceVariable:
-  Enabled: false
-
-Rails/SkipsModelValidations:
-  AllowedMethods:
-    - touch
-    - touch_all
-
-Rails/UnknownEnv:
-  Environments:
-    - production
-    - development
-    - test
-    - staging
 
 RSpec/AnyInstance:
   Enabled: false

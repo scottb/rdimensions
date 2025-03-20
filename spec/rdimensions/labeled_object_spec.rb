@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe RDimensions::LabeledObject do
-  let(:doc) { RDimensions::Document.read( P4550054) }
+  let(:doc) { RDimensions::Document.read(file_fixture("P4550054.mdd")) }
   let(:model_node) { doc.variables.find {|v| v.name == "Status" }.categories.first }
 
   it "knows its place in the document" do

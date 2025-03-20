@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe RDimensions::VariableInstance do
-  let(:document) { RDimensions::Document.read(P4550054) }
+  let(:document) { RDimensions::Document.read(file_fixture("P4550054.mdd")) }
 
   it "can enumerate the variable instances" do
     expect(document.variable_instances.size).to eq 236

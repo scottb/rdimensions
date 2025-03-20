@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe RDimensions::MDMArray do
-  let(:doc) { RDimensions::Document.read( P4550054) }
+  let(:doc) { RDimensions::Document.read(file_fixture("P4550054.mdd")) }
 
   context "simple loops" do
     let(:grq9) { doc.fields.find {|f| f.name == "GRQ9" } }

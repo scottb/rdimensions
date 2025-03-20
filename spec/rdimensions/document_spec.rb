@@ -14,7 +14,7 @@ describe RDimensions::Document do
   end
 
   context "with a valid MDD file" do
-    let(:doc) { described_class.read(P4550054) }
+    let(:doc) { described_class.read(file_fixture("P4550054.mdd").to_s) }
 
     it "is its own document" do
       expect(doc.document).to eq doc

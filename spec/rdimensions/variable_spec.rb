@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe RDimensions::Variable do
-  let(:doc) { RDimensions::Document.read( P4550054) }
+  let(:doc) { RDimensions::Document.read(file_fixture("P4550054.mdd")) }
 
   context "definition" do
     context "with case data" do
