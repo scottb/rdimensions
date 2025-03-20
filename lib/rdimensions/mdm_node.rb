@@ -1,6 +1,6 @@
 module RDimensions
   class MDMNode
-    def initialize( parent, node)
+    def initialize(parent, node)
       @document = parent.document
       @parent = parent
       @xml = node
@@ -14,9 +14,9 @@ module RDimensions
       "#<#{self.class}:#{object_id} @document=#{@document.inspect}>"
     end
 
-    def self.build( parent, node, &block)
-      result = new( parent, node)
-      result.instance_exec( node, &block) if block
+    def self.build(parent, node, &block)
+      result = new(parent, node)
+      result.instance_exec(node, &block) if block
       result
     end
 

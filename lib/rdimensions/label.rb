@@ -3,7 +3,7 @@ module RDimensions
     include MDMObject
     attr_reader :context
 
-    def with_context( context)
+    def with_context(context)
       @context = context
       self
     end

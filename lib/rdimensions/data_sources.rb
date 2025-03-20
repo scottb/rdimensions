@@ -7,7 +7,7 @@ module RDimensions
       @current || @default
     end
 
-    def with_default( value)
+    def with_default(value)
       @default = value
       self
     end

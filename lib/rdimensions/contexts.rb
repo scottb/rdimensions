@@ -7,7 +7,7 @@ module RDimensions
       @current || base
     end
 
-    def with_base( s)
+    def with_base(s)
       @base = s
       self
     end

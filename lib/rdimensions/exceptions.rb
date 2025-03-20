@@ -1,3 +1,3 @@
 module RDimensions
-  class NotYetImplementedException < Exception ; end
+  class NotYetImplementedException < Exception; end
 end

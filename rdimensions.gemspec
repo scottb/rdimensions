@@ -8,12 +8,12 @@ Gem::Specification.new do |s|
   s.description = "Rudimentary access to Dimensions Metadata"
   s.license = nil
 
-  s.files = Dir['lib/**/*']
+  s.files = Dir["lib/**/*"]
 
   s.homepage = "http://github.com/scottb/rdimensions"
-  s.required_ruby_version = Gem::Requirement.new("~> 3")
+  s.required_ruby_version = ">= 3.0"
 
   s.add_dependency "nokogiri", "~> 1.4"
 
-  s.add_development_dependency "rspec", "~> 3"
+  s.metadata["rubygems_mfa_required"] = "true"
 end

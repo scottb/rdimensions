@@ -10,15 +10,16 @@ module RDimensions
     attr_reader :categoriesref
 
     def closure
-      @elements + Document.sum( @categories.map( &:closure), [])
+      @elements + Document.sum(@categories.map(&:closure), [])
     end
 
-    def respond_to?( method, include_all = false)
-      @elements.respond_to?( method, include_all) || super
+    def respond_to?(method, include_all = false)
+      @elements.respond_to?(method, include_all) || super
     end
 
-    def method_missing( method, *args, &block)
-      return @elements.send( method, *args, &block) if @elements.respond_to?( method)
+    def method_missing(method, ...)
+      return @elements.send(method, ...) if @elements.respond_to?(method)
+
       super
     end
   end
@@ -28,12 +29,13 @@ module RDimensions
       @delegate ||= @document.categories.find {|c| c.uuid == @categoriesref }
     end
 
-    def respond_to?( method, include_all = false)
-      delegate.respond_to?( method, include_all) || super
+    def respond_to?(method, include_all = false)
+      delegate.respond_to?(method, include_all) || super
     end
 
-    def method_missing( method, *args, &block)
-      return delegate.send( method, *args, &block) if delegate.respond_to?( method)
+    def method_missing(method, ...)
+      return delegate.send(method, ...) if delegate.respond_to?(method)
+
       super
     end
 
