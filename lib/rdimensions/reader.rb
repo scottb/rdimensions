@@ -6,6 +6,8 @@ class Nokogiri::XML::Element
 end
 
 module RDimensions
+  VERSION = "0.2.0"
+
   class Document
     class << self
       def read(filename)
