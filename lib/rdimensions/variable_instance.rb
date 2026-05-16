@@ -32,7 +32,7 @@ module RDimensions
 
   class Category
     def build_variable_instances(parent_name)
-      othervariables.map {|v| VariableInstance.new("#{parent_name}.#{v.name}", v) }
+      othervariables.uniq(&:name).map {|v| VariableInstance.new("#{parent_name}.#{v.name}", v) }
     end
   end
 
