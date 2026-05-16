@@ -6,7 +6,7 @@ class Nokogiri::XML::Element
 end
 
 module RDimensions
-  VERSION = "0.2.0"
+  VERSION = "0.3.0"
 
   class Document
     class << self
