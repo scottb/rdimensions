@@ -6,7 +6,7 @@ class Nokogiri::XML::Element
 end
 
 module RDimensions
-  VERSION = "0.2.0"
+  VERSION = "0.3.0"
 
   class Document
     class << self
@@ -87,6 +87,7 @@ module RDimensions
           @labels = Factory.build_labels_for(node)
           @categories = Factory.build_categories_for(self, node)
           @mdm_class = Factory.build_class_for(self, node.at_xpath("class"))
+          @version = node.xpath("versions/version/@name").map {|n| n.value.to_i }.max
         end
       end
     end

@@ -32,7 +32,11 @@ module RDimensions
 
   class Category
     def build_variable_instances(parent_name)
-      othervariables.map {|v| VariableInstance.new("#{parent_name}.#{v.name}", v) }
+      othervariables
+        .each_with_index
+        .group_by {|v, _i| v.name }
+        .map {|_name, pairs| pairs.max_by {|v, i| [v.version || 0, i] }.first }
+        .map {|v| VariableInstance.new("#{parent_name}.#{v.name}", v) }
     end
   end
 

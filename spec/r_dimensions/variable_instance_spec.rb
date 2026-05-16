@@ -72,4 +72,89 @@ RSpec.describe RDimensions::VariableInstance do
       expect(instance_names).to include("LoopQ27ToQ29[{D}].BlockQ27ToQ29.Q27", "LoopQ27ToQ29[{D}].BlockQ27ToQ29.Q29")
     end
   end
+
+  describe "duplicate othervariables within a category" do
+    let(:mdd) { <<~XML }
+      <?xml version="1.0" encoding="UTF-8"?>
+      <xml><mdm:metadata xmlns:mdm="http://www.spss.com/mr/dm/metadatamodel/Arc 3/2000-02-04">
+        <datasources/>
+        <definition>
+          <othervariable id="ov-v1" name="Other_specify" type="2" min="0" max="253">
+            <versions><version name="1"><othervariable name="Other_specify" type="2"/></version></versions>
+          </othervariable>
+          <othervariable id="ov-v8" name="Other_specify" type="2" min="0" max="253">
+            <versions><version name="8"><othervariable name="Other_specify" type="2"/></version></versions>
+          </othervariable>
+          <othervariable id="ov-v18" name="Other_specify" type="2" min="0" max="253">
+            <versions><version name="18"><othervariable name="Other_specify" type="2"/></version></versions>
+          </othervariable>
+          <othervariable id="ov-unversioned-a" name="Plain_other" type="2" min="0" max="253"/>
+          <othervariable id="ov-unversioned-b" name="Plain_other" type="2" min="0" max="253"/>
+          <othervariable id="ov-other" name="Other_specify" type="2" min="0" max="253">
+            <versions><version name="1"><othervariable name="Other_specify" type="2"/></version></versions>
+          </othervariable>
+          <variable id="q1-id" name="Q1" type="3" min="1" max="1">
+            <categories>
+              <category name="Option1"/>
+              <category name="Option2">
+                <othervariable ref="ov-v8"  name="Other_specify"/>
+                <othervariable ref="ov-v18" name="Other_specify"/>
+                <othervariable ref="ov-v1"  name="Other_specify"/>
+              </category>
+            </categories>
+          </variable>
+          <variable id="q2-id" name="Q2" type="3" min="1" max="1">
+            <categories>
+              <category name="A">
+                <othervariable ref="ov-v1" name="Other_specify"/>
+              </category>
+              <category name="B">
+                <othervariable ref="ov-other" name="Other_specify"/>
+              </category>
+            </categories>
+          </variable>
+          <variable id="q3-id" name="Q3" type="3" min="1" max="1">
+            <categories>
+              <category name="OptionX">
+                <othervariable ref="ov-unversioned-a" name="Plain_other"/>
+                <othervariable ref="ov-unversioned-b" name="Plain_other"/>
+              </category>
+            </categories>
+          </variable>
+        </definition>
+        <system><fields/></system>
+        <design><fields>
+          <variable ref="q1-id" name="Q1"/>
+          <variable ref="q2-id" name="Q2"/>
+          <variable ref="q3-id" name="Q3"/>
+        </fields></design>
+        <languages base="en-US"/>
+        <contexts base="Question"/>
+        <labeltypes base=""/>
+        <routingcontexts base="Web"/>
+        <categorymap/>
+      </mdm:metadata></xml>
+    XML
+
+    let(:document) { RDimensions::Document.parse(mdd) }
+    let(:instance_names) { document.variable_instances.map(&:name) }
+
+    it "collapses duplicate-name siblings into a single instance" do
+      expect(instance_names.count("Q1.Other_specify")).to eq 1
+    end
+
+    it "still produces one instance per category when the same name appears in sibling categories" do
+      expect(instance_names.count("Q2.Other_specify")).to eq 2
+    end
+
+    it "keeps the highest-version duplicate regardless of document order" do
+      q1_other = document.variable_instances.find {|vi| vi.name == "Q1.Other_specify" }
+      expect(q1_other.sources.first.uuid).to eq "ov-v18"
+    end
+
+    it "falls back to last-wins when duplicates carry no version info" do
+      q3_other = document.variable_instances.find {|vi| vi.name == "Q3.Plain_other" }
+      expect(q3_other.sources.first.uuid).to eq "ov-unversioned-b"
+    end
+  end
 end
