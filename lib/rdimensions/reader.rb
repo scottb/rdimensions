@@ -87,6 +87,7 @@ module RDimensions
           @labels = Factory.build_labels_for(node)
           @categories = Factory.build_categories_for(self, node)
           @mdm_class = Factory.build_class_for(self, node.at_xpath("class"))
+          @version = node.xpath("versions/version/@name").map {|n| n.value.to_i }.max
         end
       end
     end
